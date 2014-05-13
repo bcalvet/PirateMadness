@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <fr.upem.piratesmadness.GameArea
+        android:id="@+id/fr.upem.piratesmadness.fragment_game.surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </fr.upem.piratesmadness.GameArea>
+
+</LinearLayout>

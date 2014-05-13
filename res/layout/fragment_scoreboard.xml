@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_layout_score_board"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/linear_textview_score_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="0"
+        android:textSize="40sp"
+        android:text="@string/text_score_board" />
+
+    <ListView
+        android:id="@+id/id_score_board"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/drapeau_pirate"
+        android:orientation="vertical"
+        android:scrollbars="vertical" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_score_board_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:layout_weight="0">
+
+        <Button
+            android:id="@+id/button_menu"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_standart_gimp"
+            android:gravity="center"
+            android:text="@string/menu" />
+        <Button
+            android:id="@+id/button_play"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_standart_gimp"
+            android:gravity="center"
+            android:text="@string/play_game" />
+        <Button
+            android:id="@+id/button_settings"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_standart_gimp"
+            android:gravity="center"
+            android:text="@string/settings" />
+    </LinearLayout>
+
+</LinearLayout>
