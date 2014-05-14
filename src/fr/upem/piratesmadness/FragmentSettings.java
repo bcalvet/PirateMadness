@@ -9,6 +9,7 @@ import fr.upem.piratesmadness.R;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 
 public class FragmentSettings extends Fragment {
@@ -30,25 +33,41 @@ public class FragmentSettings extends Fragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_settings, null);
 		setButtonOnListener(getActivity().getIntent().getExtras(), view);
-		ArrayList<Integer> character_list = new ArrayList<Integer>();
-		character_list.add(R.drawable.pirate1);
-		character_list.add(R.drawable.pirate2);
-//		ArrayAdapter<Integer> character = new ArrayAdapter<Integer>(
-//				getActivity(), R.layout.item_prototype_imageview_checkbox,
-//				character_list) {
-//			@Override
-//			public View getView(int position, View convertView, ViewGroup parent) {
-//				View v =  super.getView(position, convertView, parent);
-//				ImageView image = (ImageView)v.findViewById(R.id.prototype_image);
-//				image.setImageResource(getItem(position));
-//				return v;
-//			}
-//		};
-//
-//		GridView view1 = (GridView)getActivity().findViewById(R.id.grid_layout_choose_character);
-//		view1.setAdapter(character);
-
+		LayoutParams params = new LayoutParams(200, LayoutParams.WRAP_CONTENT);
+		
+		/*Player 1 panel*/
+		LinearLayout player1 = (LinearLayout) view
+				.findViewById(R.id.player1_image);
+		player1.setBackgroundColor(getResources().getColor(R.color.blue));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate1, params, 1));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate2, params, 1));
+		/*Player 2 panel*/
+		LinearLayout player2 = (LinearLayout) view
+				.findViewById(R.id.player2_image);
+		player2.setBackgroundColor(getResources().getColor(R.color.red));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate2, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate1, params, 2));
+		/*Map panel*/
+		
+		
 		return view;
+	}
+
+	private ImageView getPreconfiguredImageView(final int drawableId,
+			LayoutParams params, final int playerId) {
+		ImageView iv = new ImageView(getActivity());
+		iv.setClickable(true);
+		iv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				((MainActivity)v.getContext()).getIntent().putExtra("pirate" + playerId + "_drawable", drawableId);
+				Log.d("pirateMadness", "player " + playerId + " choose drawableId " + drawableId);
+			}
+		});
+		iv.setLayoutParams(params);
+		iv.setImageResource(drawableId);
+		return iv;
 	}
 
 	private void setButtonOnListener(final Bundle savedInstanceState, View v) {
