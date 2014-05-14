@@ -25,10 +25,10 @@
     <string name="prototype_text_text">name character</string>
     <string name="text_score_board">Score Board</string>
     <string name="sound">sound</string>
-    <string name="init_progress1">Battleground\'s initialisation (step 1\/4)</string>
-    <string name="init_progress2">your cocktail on the beach is ready (step 2\/4)</string>
-    <string name="init_progress3">Pirates anchored (step 3\/4)</string>
-    <string name="init_progress4">Are you ready to died? (step 4\/4)</string>
+    <string name="init_progress1">Battleground\'s initialisation (step 1\//4)</string>
+    <string name="init_progress2">Your cocktail on the beach is ready (step 2\//4)</string>
+    <string name="init_progress3">Pirates anchored (step 3\//4)</string>
+    <string name="init_progress4">Are you ready to died? (step 4\//4)</string>
     <string name="textview_initializer">Preparation of your world</string>
     <string name="exit">Exit</string>
     
