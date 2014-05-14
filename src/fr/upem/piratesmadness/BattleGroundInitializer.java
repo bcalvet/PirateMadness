@@ -48,18 +48,6 @@ AsyncTask<String, String, BattleGround> {
 			int i=0;
 			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress1));
-
-
-
-			//DEBUG ONLY
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
 			BattleGround bg = new BattleGround();
 			bg.obstacles = new ArrayList<Rect>();
 			bg.difficulty = activity.getIntent().getExtras().getInt("mode");
@@ -101,12 +89,6 @@ AsyncTask<String, String, BattleGround> {
 			}
 			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress2));
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			bg.height = height;
 			if (bg.width == 0 || height == 0)
 				throw new IllegalStateException();
