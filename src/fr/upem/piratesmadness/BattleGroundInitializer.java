@@ -33,8 +33,6 @@ AsyncTask<String, String, BattleGround> {
 	 * (non-Javadoc)
 	 * @see android.os.AsyncTask#doInBackground(Params[])
 	 * Params[0] : name of file
-	 * Params[1] : drawable pirate1
-	 * Params[2] : drawable pirate2
 	 */
 	@Override
 	protected BattleGround doInBackground(String... params) {
@@ -85,16 +83,13 @@ AsyncTask<String, String, BattleGround> {
 				throw new IllegalStateException();
 			float new_width;
 			float new_height;
-<<<<<<< HEAD
 			bg.isLandscape = bg.width>height;
-=======
 			if(bg.isLandscape = bg.width>height)
 				activity.getIntent().getExtras().putBoolean("landscape", true);
 			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			else
 				activity.getIntent().getExtras().putBoolean("landscape", false);
 			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
->>>>>>> 286fdc9e43059b8302ae3f876679f537ccffda70
 			if(isCancelled()){
 				return null;
 			}
@@ -216,8 +211,8 @@ AsyncTask<String, String, BattleGround> {
 						}
 						FragmentManager fm = activity.getFragmentManager();
 						FragmentGame fg = new FragmentGame();
-						fg.battle = result;
-						Log.d("PiratesMadness","Result async : "+fg.battle);
+//						fg.battle = result;
+//						Log.d("PiratesMadness","Result async : "+fg.battle);
 						FragmentTransaction ft = fm.beginTransaction();
 						ft.replace(android.R.id.content, fg);
 						ft.addToBackStack(null);

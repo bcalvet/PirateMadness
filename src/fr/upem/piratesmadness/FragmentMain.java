@@ -10,9 +10,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FragmentMain extends Fragment{
@@ -56,37 +59,80 @@ public class FragmentMain extends Fragment{
 		final Activity main = this.getActivity();
 		final FragmentManager fm = main.getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
-		Button bPlay = (Button) v.findViewById(R.id.main_menu_play);
+
+		/*
+		 * When a button is clicked, you should set enable to false.
+		 * Otherwise an error could be throw if user click on an other button during the loading
+		 */
+		final Button bScore = (Button) v.findViewById(R.id.main_menu_score_board);
+		final Button bPlay = (Button) v.findViewById(R.id.main_menu_play);
+		final Button bSettings = (Button) v.findViewById(R.id.main_menu_settings);
+
 		bPlay.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
-				//debug
-				Intent b = getActivity().getIntent();
-				b.putExtra("mode", 1);
-				b.putExtra("pirate1_drawable", R.drawable.pirate1);
-				b.putExtra("pirate2_drawable", R.drawable.pirate2);
-				b.putExtra("width", v.getWidth());
-				b.putExtra("height", v.getHeight());
-				//end debug
-				getActivity().setContentView(R.layout.fragment_initializer);
-				bgi.execute("1");
+			public void onClick(final View v) {
+				bScore.setEnabled(false);
+				bSettings.setEnabled(false);
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						//debug
+						Intent b = getActivity().getIntent();
+						b.putExtra("mode", 1);
+						b.putExtra("pirate1_drawable", R.drawable.pirate1);
+						b.putExtra("pirate2_drawable", R.drawable.pirate2);
+						b.putExtra("width", v.getWidth());
+						b.putExtra("height", v.getHeight());
+						b.putExtra("file_map", "1");
+						//end debug
+						if(BattleGround.landScape((MainActivity)getActivity(), "1")){
+							b.putExtra("reload", true);
+							main.runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									((MainActivity)getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+								}
+							});
+						}else{
+							b.putExtra("reload", true);
+							main.runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									((MainActivity)getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+								}
+							});
+						}
+					}
+				}).start();
+				//				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
+				TextView tv = new TextView(main);
+				tv.setWidth(1000);
+				tv.setHeight(1000);
+				tv.setText("WAITING");
+				tv.setTextSize(20);
+				tv.setGravity(Gravity.CENTER);
+				tv.setBackgroundColor(main.getResources().getColor(R.color.white));
+				main.setContentView(tv);
 			}
 		});
-		Button bSettings = (Button) v.findViewById(R.id.main_menu_settings);
 		bSettings.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				bScore.setEnabled(false);
+				bPlay.setEnabled(false);
 				Toast.makeText(getActivity(), "button settings", Toast.LENGTH_SHORT).show();
 				ft.replace(android.R.id.content, new FragmentSettings());
 				ft.addToBackStack(null);
 				ft.commit();  
 			}
 		});
-		Button bScore = (Button) v.findViewById(R.id.main_menu_score_board);
 		bScore.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				bSettings.setEnabled(false);
+				bPlay.setEnabled(false);
 				Toast.makeText(getActivity(), "button score", Toast.LENGTH_SHORT).show();
 				ft.replace(android.R.id.content, new FragmentScoreBoard());
 				ft.addToBackStack(null);
@@ -99,7 +145,6 @@ public class FragmentMain extends Fragment{
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "button sound", Toast.LENGTH_SHORT).show();
 				sound = !sound;
-				//Normalement l'enregistrement des données dans le bundle se fait dans une autre méthode
 				if(sound)bSound.setImageResource(R.drawable.sound_on);
 				else bSound.setImageResource(R.drawable.sound_off);
 			}
@@ -119,4 +164,5 @@ public class FragmentMain extends Fragment{
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("sound", sound);
 	}
+
 }
