@@ -60,7 +60,6 @@ public class FragmentMain extends Fragment{
 		bPlay.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("pirates", "blob!");
 				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
 				//debug
 				Intent b = getActivity().getIntent();
@@ -69,33 +68,9 @@ public class FragmentMain extends Fragment{
 				b.putExtra("pirate2_drawable", R.drawable.pirate2);
 				b.putExtra("width", v.getWidth());
 				b.putExtra("height", v.getHeight());
-
-				//				ll.setBackgroundColor(getActivity().getResources().getColor(R.color.Black));
+				//end debug
 				getActivity().setContentView(R.layout.fragment_initializer);
 				bgi.execute("1");
-//				//end debug
-//				FragmentGame fg = new FragmentGame();
-//				try{
-//					//					Log.d("PiratesMadness","status : "+bgi.getStatus());
-//					//					Log.d("PiratesMadness","pas bug");
-//					BattleGround bg=null;
-//					try {
-//						bg = bgi.get(100,TimeUnit.MILLISECONDS);
-//					} catch (TimeoutException e) {
-//
-//					}
-//
-//					//					Log.d("PiratesMadness","bug ?");
-//
-//					fg.battle = bg;
-//				}catch(ExecutionException ee){
-//					ee.printStackTrace();
-//				}catch(InterruptedException ie){
-//					ie.printStackTrace();
-//				}
-//				ft.replace(android.R.id.content, fg);
-//				ft.addToBackStack(null);
-//				ft.commit();
 			}
 		});
 		Button bSettings = (Button) v.findViewById(R.id.main_menu_settings);

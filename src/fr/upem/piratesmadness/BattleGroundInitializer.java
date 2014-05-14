@@ -3,10 +3,9 @@ package fr.upem.piratesmadness;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,11 +14,9 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -88,12 +85,16 @@ AsyncTask<String, String, BattleGround> {
 				throw new IllegalStateException();
 			float new_width;
 			float new_height;
+<<<<<<< HEAD
+			bg.isLandscape = bg.width>height;
+=======
 			if(bg.isLandscape = bg.width>height)
 				activity.getIntent().getExtras().putBoolean("landscape", true);
 			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			else
 				activity.getIntent().getExtras().putBoolean("landscape", false);
 			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+>>>>>>> 286fdc9e43059b8302ae3f876679f537ccffda70
 			if(isCancelled()){
 				return null;
 			}
@@ -129,6 +130,24 @@ AsyncTask<String, String, BattleGround> {
 							)
 					);
 			bg.arrayPirates = pirates;
+			publishProgress(activity.getString(R.string.init_progress3));
+			for(int i = 0 ; i<((bg.isLandscape)?bg.height:bg.width); i++){
+				int size = map.get(i, new ArrayList<Integer>()).size();
+				for(int j = 0 ; j<size;j++){
+					int y = i * (int)((bg.isLandscape)?new_height:new_width);
+					int x = map.get(i).get(j) * (int)((bg.isLandscape)?new_width:new_height);
+					bg.obstacles.add(
+						new Rect(
+							x,
+							y,
+							x+(int)((bg.isLandscape)?new_height:new_width),
+							y+(int)((bg.isLandscape)?new_width:new_height)
+						)
+					);
+				}
+			}
+			
+			
 			if(isCancelled()){
 				return null;
 			}
@@ -190,10 +209,15 @@ AsyncTask<String, String, BattleGround> {
 				activity.runOnUiThread(new Runnable(){
 					
 					public void run() {
-						
+						if(result.isLandscape){
+							activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+						}else{
+							activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+						}
 						FragmentManager fm = activity.getFragmentManager();
 						FragmentGame fg = new FragmentGame();
 						fg.battle = result;
+						Log.d("PiratesMadness","Result async : "+fg.battle);
 						FragmentTransaction ft = fm.beginTransaction();
 						ft.replace(android.R.id.content, fg);
 						ft.addToBackStack(null);
