@@ -1,13 +1,16 @@
 package fr.upem.piratesmadness;
-	
-import java.util.concurrent.ExecutionException;
 
-import fr.upem.piratesmadness.R;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class FragmentMain extends Fragment{
 	private boolean sound=true;
-	
+
 	public FragmentMain() {
 	}
 
@@ -31,17 +35,17 @@ public class FragmentMain extends Fragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		Bundle extras = this.getActivity().getIntent().getExtras();
 		if(extras==null) extras = new Bundle();
-//		ImageButton bSound = (ImageButton) this.getActivity().findViewById(R.id.main_menu_sound);
-//		Log.d("PiratesMadness", "button bSound : "+bSound.getId());
-//		if(savedInstanceState!=null && savedInstanceState.getBowolean("sound"))bSound.setImageResource(R.drawable.sound_on);
-//		else bSound.setImageResource(R.drawable.sound_off);
+		//		ImageButton bSound = (ImageButton) this.getActivity().findViewById(R.id.main_menu_sound);
+		//		Log.d("PiratesMadness", "button bSound : "+bSound.getId());
+		//		if(savedInstanceState!=null && savedInstanceState.getBowolean("sound"))bSound.setImageResource(R.drawable.sound_on);
+		//		else bSound.setImageResource(R.drawable.sound_off);
 		//		media = MediaPlayer.create(this, R.raw.neantitude_robin);
 		//		media.start();
 		//		media.setLooping(true);
-//		Log.d("PiratesMadness", "vue main");
-//		for(String k : extras.keySet()){
-//			System.out.println("Key : "+k+"; value : "+extras.getString(k));
-//		}
+		//		Log.d("PiratesMadness", "vue main");
+		//		for(String k : extras.keySet()){
+		//			System.out.println("Key : "+k+"; value : "+extras.getString(k));
+		//		}
 		View view = inflater.inflate(R.layout.fragment_main, null);
 		Log.d("PiratesMadness", "view inflated : "+view);
 		setButtonOnListener(extras, view);
@@ -57,7 +61,7 @@ public class FragmentMain extends Fragment{
 			@Override
 			public void onClick(View v) {
 				Log.d("pirates", "blob!");
-				BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
+				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
 				//debug
 				Intent b = getActivity().getIntent();
 				b.putExtra("mode", 1);
@@ -65,23 +69,33 @@ public class FragmentMain extends Fragment{
 				b.putExtra("pirate2_drawable", R.drawable.pirate2);
 				b.putExtra("width", v.getWidth());
 				b.putExtra("height", v.getHeight());
-				bgi.doInBackground("1");
-				//end debug
-				FragmentGame fg = new FragmentGame();
-				try{
-					BattleGround bg = bgi.get();
-					LinearLayout ll = (LinearLayout)getActivity().findViewById(R.layout.toast_view_loading);
-					ll.setBackgroundColor(getActivity().getResources().getColor(R.color.Black));
-					getActivity().setContentView(ll);
-					fg.battle = bg;
-				}catch(ExecutionException ee){
-					ee.printStackTrace();
-				}catch(InterruptedException ie){
-					ie.printStackTrace();
-				}
-				ft.replace(android.R.id.content, fg);
-				ft.addToBackStack(null);
-				ft.commit();
+
+				//				ll.setBackgroundColor(getActivity().getResources().getColor(R.color.Black));
+				getActivity().setContentView(R.layout.fragment_initializer);
+				bgi.execute("1");
+//				//end debug
+//				FragmentGame fg = new FragmentGame();
+//				try{
+//					//					Log.d("PiratesMadness","status : "+bgi.getStatus());
+//					//					Log.d("PiratesMadness","pas bug");
+//					BattleGround bg=null;
+//					try {
+//						bg = bgi.get(100,TimeUnit.MILLISECONDS);
+//					} catch (TimeoutException e) {
+//
+//					}
+//
+//					//					Log.d("PiratesMadness","bug ?");
+//
+//					fg.battle = bg;
+//				}catch(ExecutionException ee){
+//					ee.printStackTrace();
+//				}catch(InterruptedException ie){
+//					ie.printStackTrace();
+//				}
+//				ft.replace(android.R.id.content, fg);
+//				ft.addToBackStack(null);
+//				ft.commit();
 			}
 		});
 		Button bSettings = (Button) v.findViewById(R.id.main_menu_settings);
@@ -121,9 +135,9 @@ public class FragmentMain extends Fragment{
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
+		//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub

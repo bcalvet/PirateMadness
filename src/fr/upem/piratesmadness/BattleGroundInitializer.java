@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import fr.upem.piratesmadness.R;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -19,6 +16,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class BattleGroundInitializer extends
@@ -28,8 +30,8 @@ AsyncTask<String, String, BattleGround> {
 	public BattleGroundInitializer(MainActivity act) {
 		activity = act;
 	}
-	
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see android.os.AsyncTask#doInBackground(Params[])
@@ -46,6 +48,18 @@ AsyncTask<String, String, BattleGround> {
 			int i=0;
 			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress1));
+
+
+
+			//DEBUG ONLY
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
 			BattleGround bg = new BattleGround();
 			bg.obstacles = new ArrayList<Rect>();
 			bg.difficulty = activity.getIntent().getExtras().getInt("mode");
@@ -65,7 +79,7 @@ AsyncTask<String, String, BattleGround> {
 				int x = 0;
 				for (char c : line.toCharArray()) { //while pour perf
 					ArrayList<Integer> current = map.get(height,
-						new ArrayList<Integer>());
+							new ArrayList<Integer>());
 					if (c == 'x'){
 						current.add(x);
 					}else if(c == '1' || c == '2'){ // A modifier pour plus de joueurs
@@ -87,6 +101,12 @@ AsyncTask<String, String, BattleGround> {
 			}
 			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress2));
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			bg.height = height;
 			if (bg.width == 0 || height == 0)
 				throw new IllegalStateException();
@@ -94,9 +114,11 @@ AsyncTask<String, String, BattleGround> {
 			float new_height;
 			Log.d("PiratesMadness","Test debug"+i);i++;
 			if(bg.isLandscape = bg.width>height)
-				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				activity.getIntent().getExtras().putBoolean("landscape", true);
+			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			else
-				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				activity.getIntent().getExtras().putBoolean("landscape", false);
+			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			if(isCancelled()){
 				return null;
 			}
@@ -120,7 +142,7 @@ AsyncTask<String, String, BattleGround> {
 											new_width,
 											new_height,
 											activity.getIntent().getExtras().getInt("pirate1_drawable")
-									)
+											)
 							)
 					);
 			Log.d("PiratesMadness","Test debug"+i);i++;
@@ -134,7 +156,7 @@ AsyncTask<String, String, BattleGround> {
 											new_width,
 											new_height,
 											activity.getIntent().getExtras().getInt("pirate2_drawable")
-									)
+											)
 							)
 					);
 			Log.d("PiratesMadness","Test debug"+i);i++;
@@ -142,7 +164,7 @@ AsyncTask<String, String, BattleGround> {
 			if(isCancelled()){
 				return null;
 			}
-			Log.d("PiratesMadness","Test debug"+i);i++;
+			Log.d("PiratesMadness","Test debug fin"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress4));
 			return bg;
 		} catch (IOException ise) {
@@ -160,50 +182,64 @@ AsyncTask<String, String, BattleGround> {
 				drawable);
 		Matrix matrix = new Matrix();
 		matrix.postScale(new_width / basic.getWidth(),
-			new_height / basic.getHeight());
+				new_height / basic.getHeight());
 		return Bitmap.createBitmap(basic, 0, 0, basic.getWidth(),
 				basic.getHeight(), matrix, true);
 	}
-	
+
 	@Override
 	protected void onProgressUpdate(String... values) {
-		TextView v = (TextView)((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.toast_view_loading, null);
-		CharSequence tmp = v.getText();
-		if(tmp==null){
-			v.setText(values[values.length-1]);
-		}else{
-			v.setText(tmp+values[values.length-1]);
-		}
+		TextView tx = (TextView) activity.findViewById(R.id.fr_upem_piratesmadness_BattleGroundInitialize_textview);
+		tx.setText(values[values.length-1]);
 	}
 
 	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		final BattleGroundInitializer bgi = this;
+		ProgressBar pb = (ProgressBar) activity.findViewById(R.id.fr_upem_piratesmadness_BattleGroundInitialize_progressbar);
+		pb.setIndeterminate(true);
+		Button exit = (Button) activity.findViewById(R.id.fr_upem_piratesmadness_BattleGroundInitialize_button);
+		exit.setOnClickListener(new OnClickListener() {					
+			@Override
+			public void onClick(View v) {
+				bgi.cancel(true);
+				bgi.activity.asyncTask=null;
+			}
+		});			
+	}
+	
+	@Override
 	protected void onPostExecute(final BattleGround result) {
+		super.onPostExecute(result);
+		Log.d("PiratesMadness", "result postExecute");
 		if(activity!=null){
 			activity.asyncTask=null;
 		}
 		if(result==null){
+			Log.e("PiratesMadness", "Error for the result : value is null");
 			System.exit(-1);
 		}
-		super.onPostExecute(result);
-		activity.runOnUiThread(new Runnable(){
-			
-			public void run() {
-				FragmentManager fm = activity.getFragmentManager();
-				FragmentGame fg = new FragmentGame();
-				fg.battle = result;
-				FragmentTransaction ft = fm.beginTransaction();
-				ft.replace(R.layout.fragment_game, fg);
-				ft.addToBackStack(null);
-				ft.commit();}
-		});
+				activity.runOnUiThread(new Runnable(){
+					
+					public void run() {
+						
+						FragmentManager fm = activity.getFragmentManager();
+						FragmentGame fg = new FragmentGame();
+						fg.battle = result;
+						FragmentTransaction ft = fm.beginTransaction();
+						ft.replace(android.R.id.content, fg);
+						ft.addToBackStack(null);
+						ft.commit();}
+				});
 	}
-	
+
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
 		onPostExecute(null);
 	}
-	
+
 	@Override
 	protected void onCancelled(BattleGround result) {
 		super.onCancelled(result);

@@ -4,18 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:background="@color/Black">
+    <ProgressBar 
+        android:id="@+id/fr.upem.piratesmadness.BattleGroundInitialize.progressbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        style="@android:style/Widget.ProgressBar.Horizontal"/>
     <TextView 
         android:id="@+id/fr.upem.piratesmadness.BattleGroundInitialize.textview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="50dp"
+        android:layout_height="0dip"
         android:layout_weight="1"
-        android:text="@string/textview_initializer"/>
+        android:text="@string/textview_initializer"
+        android:background="@color/Black"
+        android:textColor="@color/white"
+        android:gravity="center"/>
     <Button 
         android:id="@+id/fr.upem.piratesmadness.BattleGroundInitialize.button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
         android:text="@string/exit"
         android:layout_gravity="center"/>
     
