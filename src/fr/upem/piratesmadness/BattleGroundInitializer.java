@@ -45,8 +45,6 @@ AsyncTask<String, String, BattleGround> {
 			if(isCancelled()){
 				return null;
 			}
-			int i=0;
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress1));
 			BattleGround bg = new BattleGround();
 			bg.obstacles = new ArrayList<Rect>();
@@ -56,12 +54,9 @@ AsyncTask<String, String, BattleGround> {
 			ArrayList<Pirate> pirates = new ArrayList<Pirate>();
 			Point pirate1 = new Point();
 			Point pirate2 = new Point();
-			Log.d("PiratesMadness","activity : "+activity);
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			Scanner s = new Scanner(activity.getAssets().open(params[0]));
 			boolean firstCircle = true;
 			String line;
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			while (s.hasNextLine()) {
 				line = s.nextLine();
 				int x = 0;
@@ -87,14 +82,12 @@ AsyncTask<String, String, BattleGround> {
 					return null;
 				}
 			}
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress2));
 			bg.height = height;
 			if (bg.width == 0 || height == 0)
 				throw new IllegalStateException();
 			float new_width;
 			float new_height;
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			if(bg.isLandscape = bg.width>height)
 				activity.getIntent().getExtras().putBoolean("landscape", true);
 			//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -104,16 +97,11 @@ AsyncTask<String, String, BattleGround> {
 			if(isCancelled()){
 				return null;
 			}
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress3));
 			new_width = (float)activity.getIntent().getExtras().getInt("width") / (float)(bg.width);
 			new_height = (float)activity.getIntent().getExtras().getInt("height") / (float)(bg.height);
 			bg.texture = rescaledBitmap(activity, new_width, new_height, R.drawable.wall);
-
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			activity.getResources().getDrawable(activity.getIntent().getExtras().getInt("pirate1_drawable"));
-
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			pirates.add(
 					new Pirate(
 							new Point((int)(pirate1.x*new_width),
@@ -127,7 +115,6 @@ AsyncTask<String, String, BattleGround> {
 											)
 							)
 					);
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			pirates.add(
 					new Pirate(
 							new Point((int)(pirate2.x*new_width),
@@ -141,12 +128,10 @@ AsyncTask<String, String, BattleGround> {
 											)
 							)
 					);
-			Log.d("PiratesMadness","Test debug"+i);i++;
 			bg.arrayPirates = pirates;
 			if(isCancelled()){
 				return null;
 			}
-			Log.d("PiratesMadness","Test debug fin"+i);i++;
 			publishProgress(activity.getString(R.string.init_progress4));
 			return bg;
 		} catch (IOException ise) {
