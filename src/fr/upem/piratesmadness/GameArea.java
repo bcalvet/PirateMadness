@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -23,14 +24,22 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 //		}
 		MainActivity main = (MainActivity) getContext();
 		bg = BattleGround.initGame(main);
+
+		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
+
+		//Initialization of the IAController too
+		final IAController ia = new IAController();
 		workerThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				IAController ia = new IAController();
+				//Infinity cycle to move and update information
+				for(;;){
+					ia.update(bg);;
+				}
 			}
 		});
+		workerThread.setDaemon(true);
 	}
 
 	@Override
@@ -70,5 +79,4 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawBitmap(pirate.texture, (float)pirate.coordinate.x, (float)pirate.coordinate.y, null);
 		}
 	}
-
 }

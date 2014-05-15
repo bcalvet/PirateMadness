@@ -85,7 +85,7 @@ public class FragmentMain extends Fragment{
 						b.putExtra("pirate2_drawable", R.drawable.pirate2);
 						b.putExtra("width", v.getWidth());
 						b.putExtra("height", v.getHeight());
-						b.putExtra("file_map", "1");
+						b.putExtra("file_map", "3");
 						//end debug
 						if(BattleGround.landScape((MainActivity)getActivity(), "1")){
 							b.putExtra("reload", true);
@@ -106,15 +106,10 @@ public class FragmentMain extends Fragment{
 						}
 					}
 				}).start();
+				ft.replace(android.R.id.content, new FragmentGame());
+				ft.addToBackStack(null);
+				ft.commit();
 				//				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
-				TextView tv = new TextView(main);
-				tv.setWidth(1000);
-				tv.setHeight(1000);
-				tv.setText("WAITING");
-				tv.setTextSize(20);
-				tv.setGravity(Gravity.CENTER);
-				tv.setBackgroundColor(main.getResources().getColor(R.color.white));
-				main.setContentView(tv);
 			}
 		});
 		bSettings.setOnClickListener(new OnClickListener() {

@@ -10,7 +10,8 @@ public class Pirate {
 	int life;
 	String name;
 	Bitmap texture;
-	int speed;
+	float speed;
+	float speedAcceleration;
 	Direction gravity;
 	boolean noGravity;
 	Direction direction;
@@ -33,6 +34,9 @@ public class Pirate {
 			middleY = height;
 		}
 		this.padBuffer = new Rect(0, 0, middleX, middleY);
+		life = 3;
+		speed=1;
+		speedAcceleration=0;
 	}
 	
 	public Rect getPiratePadBuffer(){

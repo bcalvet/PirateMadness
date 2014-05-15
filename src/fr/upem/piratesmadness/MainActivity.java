@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
     	// TODO Auto-generated method stub
     	super.onResume();
     	if(getIntent().getExtras()!=null && getIntent().getExtras().getBoolean("reload")){
+    		getIntent().getExtras().putBoolean("reload", false);
     		final FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.replace(android.R.id.content, new FragmentGame());
 			ft.addToBackStack(null);
