@@ -41,12 +41,20 @@ public class FragmentSettings extends Fragment {
 		player1.setBackgroundColor(getResources().getColor(R.color.blue));
 		player1.addView(getPreconfiguredImageView(R.drawable.pirate1, params, 1));
 		player1.addView(getPreconfiguredImageView(R.drawable.pirate2, params, 1));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate3, params, 1));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate4, params, 1));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate5, params, 1));
+		player1.addView(getPreconfiguredImageView(R.drawable.pirate6, params, 1));
 		/*Player 2 panel*/
 		LinearLayout player2 = (LinearLayout) view
 				.findViewById(R.id.player2_image);
 		player2.setBackgroundColor(getResources().getColor(R.color.red));
-		player2.addView(getPreconfiguredImageView(R.drawable.pirate2, params, 2));
 		player2.addView(getPreconfiguredImageView(R.drawable.pirate1, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate2, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate3, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate4, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate5, params, 2));
+		player2.addView(getPreconfiguredImageView(R.drawable.pirate6, params, 2));
 		/*Map panel*/
 		
 		

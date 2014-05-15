@@ -67,7 +67,7 @@ public class FragmentMain extends Fragment{
 		final Button bScore = (Button) v.findViewById(R.id.main_menu_score_board);
 		final Button bPlay = (Button) v.findViewById(R.id.main_menu_play);
 		final Button bSettings = (Button) v.findViewById(R.id.main_menu_settings);
-
+		final View main_view = v;
 		bPlay.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -83,8 +83,8 @@ public class FragmentMain extends Fragment{
 						b.putExtra("mode", 1);
 						b.putExtra("pirate1_drawable", R.drawable.pirate1);
 						b.putExtra("pirate2_drawable", R.drawable.pirate2);
-						b.putExtra("width", v.getWidth());
-						b.putExtra("height", v.getHeight());
+						b.putExtra("width", main_view.getWidth());
+						b.putExtra("height", main_view.getHeight());
 						b.putExtra("file_map", "3");
 						//end debug
 						if(BattleGround.landScape((MainActivity)getActivity(), "1")){

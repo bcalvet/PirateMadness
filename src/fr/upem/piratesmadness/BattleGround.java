@@ -113,19 +113,29 @@ public class BattleGround {
 					);
 			bg.arrayPirates = pirates;
 
-			for(int i = 0 ; i<((bg.isLandscape)?bg.height:bg.width); i++){
+//			for(int i = 0 ; i<((bg.isLandscape)?bg.height:bg.width); i++){
+//				int size = map.get(i, new ArrayList<Integer>()).size();
+//				for(int j = 0 ; j<size;j++){
+//					int y = i * (int)((bg.isLandscape)?new_height:new_width);
+//					int x = map.get(i).get(j) * (int)((bg.isLandscape)?new_width:new_height);
+//					bg.obstacles.add(
+//							new Rect(
+//									x,
+//									y,
+//									x+(int)((bg.isLandscape)?new_height:new_width),
+//									y+(int)((bg.isLandscape)?new_width:new_height)
+//									)
+//							);
+//				}
+//			}
+			
+			for (int i = 0; i < ((bg.isLandscape)?bg.width:bg.height); i++) {
 				int size = map.get(i, new ArrayList<Integer>()).size();
-				for(int j = 0 ; j<size;j++){
-					int y = i * (int)((bg.isLandscape)?new_height:new_width);
-					int x = map.get(i).get(j) * (int)((bg.isLandscape)?new_width:new_height);
+				for (int j = 0; j < size; j++) {
+					int y = i*bg.texture.getHeight();
+					int x = map.get(i).get(j)* bg.texture.getWidth();
 					bg.obstacles.add(
-							new Rect(
-									x,
-									y,
-									x+(int)((bg.isLandscape)?new_height:new_width),
-									y+(int)((bg.isLandscape)?new_width:new_height)
-									)
-							);
+							new Rect(x , y ,x+bg.texture.getWidth(),y+bg.texture.getHeight()));
 				}
 			}
 
