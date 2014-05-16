@@ -35,8 +35,9 @@ public class Pirate {
 		}
 		this.padBuffer = new Rect(0, 0, middleX, middleY);
 		life = 3;
-		speed=1;
+		speed=3;
 		speedAcceleration=0;
+		noGravity=true;
 	}
 	
 	public Rect getPiratePadBuffer(){

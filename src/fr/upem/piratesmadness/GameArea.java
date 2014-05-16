@@ -23,19 +23,36 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 //			((Activity)getContext()).finish();
 //		}
 		MainActivity main = (MainActivity) getContext();
+		final SurfaceHolder holder = getHolder();
 		bg = BattleGround.initGame(main);
 
 		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
 
 		//Initialization of the IAController too
 		final IAController ia = new IAController();
+		final ImpactController impactController = new ImpactController(); 
 		workerThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
+				//Initialization of gravity and direction
+				impactController.update(bg);
+				for(int i=0; i<bg.arrayPirates.size(); i++){
+					Pirate pirate = bg.arrayPirates.get(i);
+					if(pirate.gravity==null)
+						pirate.gravity=Direction.SOUTH;
+					pirate.gravity.randomDirection(pirate);
+				}
 				//Infinity cycle to move and update information
-				for(;;){
-					ia.update(bg);;
+				while(!Thread.interrupted()){
+					impactController.update(bg);
+					ia.update(bg);
+					Canvas canvas = holder.lockCanvas();
+					canvas.drawRGB(255, 255, 255);
+					drawMap(canvas);
+					drawPirate(canvas);
+					holder.unlockCanvasAndPost(canvas);
+					
 				}
 			}
 		});
@@ -57,6 +74,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 //		Log.d("PiratesMadness","SurfaceChanged");
+		
 	}
 
 	@Override
@@ -76,7 +94,9 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	private void drawPirate(Canvas canvas){
 		for(int i = 0; i<2; i++){
 			Pirate pirate = bg.arrayPirates.get(i);
-			canvas.drawBitmap(pirate.texture, (float)pirate.coordinate.x, (float)pirate.coordinate.y, null);
+			canvas.drawBitmap(pirate.texture,
+					(float)pirate.coordinate.x-(pirate.texture.getWidth()/2),
+					(float)pirate.coordinate.y+(pirate.texture.getHeight()/2), null);
 		}
 	}
 }

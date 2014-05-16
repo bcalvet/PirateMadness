@@ -48,7 +48,7 @@ public class IAController {
 	}
 	
 	private void startingToJump(Pirate p){
-		p.speedAcceleration=(float) 1.5;
+		p.speedAcceleration=(float) 1.6;
 	}
 
 	private boolean checkWall(ArrayList<Rect> obstacles, Pirate p1){
@@ -57,8 +57,17 @@ public class IAController {
 		return false;
 	};
 	
-	private boolean searchNearestWall(ArrayList<Rect> obstacles, Pirate p1){
-		return false;
+	private void affectNearestWall(ArrayList<Rect> obstacles, Pirate p1){
+		int sizeObstacles = obstacles.size();
+		int i=0;
+		int y = p1.coordinate.y;
+		int x = p1.coordinate.x;
+		for(i=0;i<sizeObstacles;i++){
+			//Doesn't work. Because ArrayList isn't in a specifically order
+			if(obstacles.get(i).contains(x, y)){
+				
+			}
+		}
 	}
 	
 	private void showInformation(BattleGround bg){
@@ -66,55 +75,23 @@ public class IAController {
 			Log.d("PiratesMadness", "Pirate : "+p.name+"; coordinate, width :"+p.coordinate.x+"; height : "+p.coordinate.y+"; buffer : "+p.padBuffer.flattenToString());
 			Log.d("PiratesMadness","speed : "+p.speed+"; speed accélération : "+p.speedAcceleration+"; Direction : "+p.direction+"; gravity : "+p.gravity);
 		}
-		for(Rect r : bg.obstacles){
-			Log.d("PiratesMadness","obstacle : "+r.flattenToString());
-		}
+//		for(Rect r : bg.obstacles){
+//			Log.d("PiratesMadness","obstacle : "+r.flattenToString());
+//		}
 	}
 	
-	private void initPirate(BattleGround bg){
-		//Initialisaion of speed, direction
-		int i=0;
-		int j=0;
-		int numberOfObstacles = bg.obstacles.size();
-		int numberOfPirate = bg.arrayPirates.size();
-		Pirate p;
-		for(i=0;i<numberOfPirate;i++){
-			p = bg.arrayPirates.get(i);
-			p.speed=1;
-			p.life=3;
-			p.noGravity=false;
-			
-			//Need to determinate what is the gravity direction. After this we can choose the direction.
-			
-			for(j=0; j<numberOfObstacles; j++){
-				if(bg.obstacles.get(j).bottom==p.coordinate.y+p.texture.getHeight()){
-					;
-				}
-				else if(bg.obstacles.get(i).top==p.coordinate.y){
-					;
-				}
-				else if(bg.obstacles.get(i).right==p.coordinate.x+p.texture.getWidth()){
-					;
-				}
-				else if(bg.obstacles.get(i).left==p.coordinate.x){
-					;
-				}
-			}
-//			bg.arrayPirates.get(i).gravity;
-//			bg.arrayPirates.get(i).direction;
-		}
-		//Gravity is already initialized because the PNG is in the great position
-	}
 
 	public void update(BattleGround battleGround){
 		//DEBUG 
-		showInformation(battleGround);
+//		showInformation(battleGround);
 		
 		int numberOfPirates = battleGround.arrayPirates.size();
+		ArrayList<Pirate> arrayPirate = battleGround.arrayPirates;
 		
 		for(int i=0; i<numberOfPirates; i++){
 			//If there is a jump : check direction and gravity; due to two variables changed
 //				checkWall(battleGround.obstacles, battleGround.arrayPirates.get(i), battleGround.arrayPirates.get(i).direction);
+			move(arrayPirate.get(i));
 		}
 		
 		
