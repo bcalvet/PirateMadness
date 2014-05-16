@@ -1,5 +1,7 @@
 package fr.upem.piratesmadness;
 
+import java.util.List;
+
 import fr.upem.piratesmadness.R;
 import android.content.Context;
 import android.view.View;
@@ -9,9 +11,9 @@ import android.widget.TextView;
 
 public class ScoreBoardAdapter extends ArrayAdapter<LineScoreBoard>{
 
-	public ScoreBoardAdapter(Context context, int resource, int ressourceText,
-			LineScoreBoard[] objects) {
-		super(context, resource, ressourceText,objects);
+	public ScoreBoardAdapter(Context context, int resource,
+			List<LineScoreBoard> objects) {
+		super(context, resource, objects);
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -11,27 +11,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
-        android:text="name winner"/>
+        android:text="name winner"
+        android:textColor="@color/white" />
     <TextView 
         android:id="@+id/id_prototype_text_name_looser"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
-        android:text="name looser"/>
+        android:text="name looser"
+        android:textColor="@color/white" />
     <TextView 
         android:id="@+id/id_prototype_text_time"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
-        android:text="time"/>
+        android:text="time"
+        android:textColor="@color/white" />
     <TextView 
         android:id="@+id/id_prototype_text_score"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
-        android:text="score"/>
+        android:text="score"
+        android:textColor="@color/white" />
     
 </LinearLayout>
