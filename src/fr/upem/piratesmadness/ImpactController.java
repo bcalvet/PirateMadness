@@ -45,21 +45,16 @@ public class ImpactController {
 	}
 
 	private void changeGravity(Pirate p1, Rect rec){
-		float xDelta = p1.coordinate.x-rec.exactCenterX();
-		float yDelta = p1.coordinate.y-rec.exactCenterY();
-		Log.d("PiratesMadness","xDelta : "+xDelta+"; yDelta : "+yDelta);
-		if(xDelta>=0.5 && xDelta<=-0.5){
-			if(yDelta<=-1 && yDelta>=-2){
-				p1.gravity = Direction.NORTH;
-			} else {
-				p1.gravity = Direction.SOUTH;
-			}
-		}else{
-			if(xDelta<=-1 && xDelta>=-2){
-				p1.gravity = Direction.EAST;
-			} else {
-				p1.gravity = Direction.WEST;
-			}
+		float xDelta = p1.getPirateBuffer().centerX()-rec.exactCenterX();
+		float yDelta = p1.getPirateBuffer().centerY()-rec.exactCenterY();
+		if(xDelta==1 && yDelta!=1){
+			p1.gravity = Direction.WEST;
+		}else if(xDelta==-1 && yDelta!=1){
+			p1.gravity = Direction.EAST;
+		}else if(xDelta!=1 && yDelta==1){
+			p1.gravity = Direction.SOUTH;
+		}else if(xDelta!=1 && yDelta==-1){
+			p1.gravity = Direction.NORTH;
 		}
 	}
 

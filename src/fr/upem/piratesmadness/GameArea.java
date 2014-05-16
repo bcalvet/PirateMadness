@@ -23,7 +23,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 //			((Activity)getContext()).finish();
 //		}
 		MainActivity main = (MainActivity) getContext();
-		final SurfaceHolder holder = getHolder();
+		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
 
 		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
@@ -45,14 +45,18 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 				}
 				//Infinity cycle to move and update information
 				while(!Thread.interrupted()){
+					SurfaceHolder holder = ga.getHolder();
 					impactController.update(bg);
 					ia.update(bg);
-					Canvas canvas = holder.lockCanvas();
-					canvas.drawRGB(255, 255, 255);
-					drawMap(canvas);
-					drawPirate(canvas);
-					holder.unlockCanvasAndPost(canvas);
-					
+					try{
+						Canvas canvas = holder.lockCanvas();
+						canvas.drawRGB(255, 255, 255);
+						drawMap(canvas);
+						drawPirate(canvas);
+						holder.unlockCanvasAndPost(canvas);
+					}catch(NullPointerException npe){
+						//Do Nothing
+					}
 				}
 			}
 		});
@@ -61,39 +65,34 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-//		Log.d("PiratesMadness","SurfaceCreated");
-		
 		workerThread.start();
-		Canvas canvas = holder.lockCanvas();
-		drawMap(canvas);
-		drawPirate(canvas);
-		holder.unlockCanvasAndPost(canvas);
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-//		Log.d("PiratesMadness","SurfaceChanged");
 		
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
+		workerThread.interrupt();
 	}
 
 	private void drawMap(Canvas canvas){
-		canvas.drawARGB(0, 0, 0, 0);
 		for(int i = 0; i<bg.obstacles.size();i++){
 			Paint p = new Paint();
 			p.setColor(getContext().getResources().getColor(R.color.Black));
 			canvas.drawRect(bg.obstacles.get(i), p);
-			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
+//			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
 		}
 	}
 	private void drawPirate(Canvas canvas){
 		for(int i = 0; i<2; i++){
 			Pirate pirate = bg.arrayPirates.get(i);
+			Paint p = new Paint();
+			p.setColor(getContext().getResources().getColor(R.color.green));
+			canvas.drawRect(pirate.getPirateBuffer(), p);
 			canvas.drawBitmap(pirate.texture,
 					(float)pirate.coordinate.x-(pirate.texture.getWidth()/2),
 					(float)pirate.coordinate.y+(pirate.texture.getHeight()/2), null);

@@ -113,22 +113,7 @@ public class BattleGround {
 					);
 			bg.arrayPirates = pirates;
 
-//			for(int i = 0 ; i<((bg.isLandscape)?bg.height:bg.width); i++){
-//				int size = map.get(i, new ArrayList<Integer>()).size();
-//				for(int j = 0 ; j<size;j++){
-//					int y = i * (int)((bg.isLandscape)?new_height:new_width);
-//					int x = map.get(i).get(j) * (int)((bg.isLandscape)?new_width:new_height);
-//					bg.obstacles.add(
-//							new Rect(
-//									x,
-//									y,
-//									x+(int)((bg.isLandscape)?new_height:new_width),
-//									y+(int)((bg.isLandscape)?new_width:new_height)
-//									)
-//							);
-//				}
-//			}
-			
+			//Trad map to background
 			for (int i = 0; i < ((bg.isLandscape)?bg.width:bg.height); i++) {
 				int size = map.get(i, new ArrayList<Integer>()).size();
 				for (int j = 0; j < size; j++) {
@@ -139,6 +124,27 @@ public class BattleGround {
 				}
 			}
 
+			//Refactoring background
+			int checked = 1;
+			while(checked!=0){
+				checked = 0;
+				for(Rect r1 : bg.obstacles){
+					for(Rect r2 : bg.obstacles){
+						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
+							bg.obstacles.remove(r1);
+							bg.obstacles.remove(r2);
+							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
+							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
+							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
+							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
+							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
+							checked++;
+							break;
+						}
+					}
+				}
+			}
+			
 			return bg;
 		} catch (IOException ise) {
 			Log.e("pirate", "Can't parse level file!");
@@ -153,8 +159,6 @@ public class BattleGround {
 	private static Bitmap rescaledBitmap(MainActivity ga, float new_width, float new_height, int drawable){
 		Bitmap basic = BitmapFactory.decodeResource(ga.getResources(),
 				drawable);
-		Log.d("PiratesMadness","NEW width : "+new_width+"height : "+new_height);
-		Log.d("PiratesMadness","BASIC width : "+basic.getWidth()+"height : "+basic.getHeight());
 		Matrix matrix = new Matrix();
 		matrix.postScale(new_width / basic.getWidth(),
 				new_height / basic.getHeight());
