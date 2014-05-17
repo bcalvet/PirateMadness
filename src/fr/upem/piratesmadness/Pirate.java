@@ -16,6 +16,7 @@ public class Pirate {
 	boolean noGravity;
 	Direction direction;
 	final Rect padBuffer;
+	Rect pirateBuffer = new Rect(0,0,0,0);
 	Activity ga;
 	
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face) {
@@ -36,7 +37,7 @@ public class Pirate {
 		this.padBuffer = new Rect(0, 0, middleX, middleY);
 		life = 3;
 		speed=3;
-		speedAcceleration=0;
+		speedAcceleration=1;
 		noGravity=true;
 	}
 	
@@ -48,7 +49,15 @@ public class Pirate {
 	}
 
 	public Rect getPirateBuffer() {
-		Rect area = new Rect(coordinate.x+(texture.getWidth()/2),coordinate.y-(texture.getHeight()/2), coordinate.x-(texture.getWidth()/2), coordinate.y+(texture.getHeight()/2));
-		return area;
+		pirateBuffer.left = coordinate.x-(texture.getWidth()/2);
+		pirateBuffer.top= coordinate.y - (texture.getHeight()/2);
+		pirateBuffer.right = coordinate.x + (texture.getWidth()/2);
+		pirateBuffer.bottom = coordinate.y + (texture.getHeight()/2);
+		return pirateBuffer;
+	}
+	
+	@Override
+	public String toString() {
+		return "Pirate "+name+"; coordinate(x,y) : ("+coordinate.x+","+coordinate.y+"); texture (height & width) : "+texture.getHeight()+";"+texture.getWidth()+"; gravity : "+noGravity+"; gravity sens : "+gravity+"; direction : "+direction+ "speed : "+speed+"; speedAcceleration : "+speedAcceleration+"; padBuffer : "+padBuffer.flattenToString();
 	}
 }

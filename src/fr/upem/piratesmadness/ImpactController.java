@@ -31,7 +31,7 @@ public class ImpactController {
 	}
 
 	private void fall(Pirate p1) {
-		p1.speedAcceleration=(float)-1.2;
+		p1.speedAcceleration=(float)1.6;
 		p1.noGravity=true;
 	}
 
@@ -59,7 +59,9 @@ public class ImpactController {
 	}
 
 	private boolean hitWall(Rect obstacle, Pirate p1){
-		if(obstacle.intersect(p1.getPirateBuffer())){
+//		if(obstacle.intersect(p1.getPirateBuffer())){
+		if(Rect.intersects(p1.getPirateBuffer(),obstacle)){
+			Log.d("PiratesMadness", "Intersection of wall");
 			if(p1.noGravity){
 				//hit a wall when jumping
 				changeGravity(p1,obstacle);

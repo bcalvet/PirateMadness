@@ -42,6 +42,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					if(pirate.gravity==null)
 						pirate.gravity=Direction.SOUTH;
 					pirate.gravity.randomDirection(pirate);
+					Log.d("PiratesMadness",pirate.toString());
 				}
 				//Infinity cycle to move and update information
 				while(!Thread.interrupted()){
@@ -92,10 +93,10 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			Pirate pirate = bg.arrayPirates.get(i);
 			Paint p = new Paint();
 			p.setColor(getContext().getResources().getColor(R.color.green));
-			canvas.drawRect(pirate.getPirateBuffer(), p);
 			canvas.drawBitmap(pirate.texture,
 					(float)pirate.coordinate.x-(pirate.texture.getWidth()/2),
-					(float)pirate.coordinate.y+(pirate.texture.getHeight()/2), null);
+					(float)pirate.coordinate.y-(pirate.texture.getHeight()/2), null);
+			canvas.drawRect(pirate.getPirateBuffer(), p);
 		}
 	}
 }
