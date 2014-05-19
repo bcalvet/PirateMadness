@@ -18,6 +18,7 @@ public class Pirate {
 	final Rect padBuffer;
 	Rect pirateBuffer = new Rect(0,0,0,0);
 	Activity ga;
+	Point currentCoordinate = new Point(-1,-1);
 	
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face) {
 		int width = activity.getIntent().getExtras().getInt("width");

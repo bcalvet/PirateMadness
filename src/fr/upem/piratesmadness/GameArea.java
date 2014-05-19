@@ -36,7 +36,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			@Override
 			public void run() {
 				//Initialization of gravity and direction
-				impactController.update(bg);
+//				impactController.update(bg);
 				for(int i=0; i<bg.arrayPirates.size(); i++){
 					Pirate pirate = bg.arrayPirates.get(i);
 					if(pirate.gravity==null)
