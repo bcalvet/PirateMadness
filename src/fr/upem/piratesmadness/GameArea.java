@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -84,6 +85,8 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		for(int i = 0; i<bg.obstacles.size();i++){
 			Paint p = new Paint();
 			p.setColor(getContext().getResources().getColor(R.color.Black));
+			p.setStrokeWidth(2);
+			p.setStyle(Style.STROKE);
 			canvas.drawRect(bg.obstacles.get(i), p);
 //			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
 		}

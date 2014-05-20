@@ -50,25 +50,7 @@ public class IAController {
 	private void startingToJump(Pirate p){
 		p.speedAcceleration=(float) -1.6;
 	}
-
-	private boolean checkWall(ArrayList<Rect> obstacles, Pirate p1){
-		//Test if there is a wall in front of the IA's player
-		//Test if there is a wall under the player (else it's failing)
-		return false;
-	};
 	
-	private void affectNearestWall(ArrayList<Rect> obstacles, Pirate p1){
-		int sizeObstacles = obstacles.size();
-		int i=0;
-		int y = p1.coordinate.y;
-		int x = p1.coordinate.x;
-		for(i=0;i<sizeObstacles;i++){
-			//Doesn't work. Because ArrayList isn't in a specifically order
-			if(obstacles.get(i).contains(x, y)){
-				
-			}
-		}
-	}
 	
 	private void showInformation(BattleGround bg){
 		for(Pirate p : bg.arrayPirates){
