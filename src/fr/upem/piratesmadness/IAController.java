@@ -16,10 +16,10 @@ public class IAController {
 				pirate.coordinate.y-=pirate.speed*pirate.speedAcceleration;
 				break;
 			case WEST:
-				pirate.coordinate.x+=pirate.speed*pirate.speedAcceleration;
+				pirate.coordinate.x-=pirate.speed*pirate.speedAcceleration;
 				break;
 			case EAST:
-				pirate.coordinate.x-=pirate.speed*pirate.speedAcceleration;
+				pirate.coordinate.x+=pirate.speed*pirate.speedAcceleration;
 				break;
 			case SOUTH:
 				pirate.coordinate.y+=pirate.speed*pirate.speedAcceleration;
@@ -86,13 +86,13 @@ public class IAController {
 
 	
 	
-	//If pirate is jumping : direction =  gravity
-	public void changeDirection(Pirate p, Direction newGravity){
-		if(!p.direction.isOpposite(newGravity)){
-			p.direction = p.gravity;
-		}
-		p.gravity = newGravity;
-	}
+//	//If pirate is jumping : direction =  gravity
+//	public void changeDirection(Pirate p, Direction newGravity){
+//		if(!p.direction.isOpposite(newGravity)){
+//			p.direction = p.gravity;
+//		}
+//		p.gravity = newGravity;
+//	}
 	
 	
 }

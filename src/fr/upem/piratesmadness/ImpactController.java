@@ -58,27 +58,42 @@ public class ImpactController {
 //		}else if(xDelta!=1 && yDelta==-1){
 //			p1.gravity = Direction.NORTH;
 //		}
-		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity);
-		if(/*isInThisInterval(rec.left, p1.getPirateBuffer().centerX(), rec.right) &&*/ p1.getPirateBuffer().centerY()<rec.centerY()){
-			p1.gravity = Direction.SOUTH;
-		}else if(/*isInThisInterval(rec.left, p1.getPirateBuffer().centerX(), rec.right) && */p1.getPirateBuffer().centerY()>rec.centerY()){
-			p1.gravity = Direction.NORTH;
-		}
-		else if(/*isInThisInterval(rec.top, p1.getPirateBuffer().centerY(), rec.bottom) && */p1.getPirateBuffer().centerX()<rec.centerX()){
-			p1.gravity = Direction.EAST;
-		}else if(/*isInThisInterval(rec.top, p1.getPirateBuffer().centerY(), rec.bottom) && */p1.getPirateBuffer().centerX()>rec.centerX()){
-			p1.gravity = Direction.WEST;
-		}else{
-			Log.e("PiratesMadness", "Error when pirate change its gravity");
-		}
-		Log.d("PiratesMadness","New gravity : "+p1.gravity);
+		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
+//		if(/*isInThisInterval(rec.left, p1.getPirateBuffer().centerX(), rec.right) &&*/ p1.getPirateBuffer().centerY()<rec.centerY()){
+//			p1.gravity = Direction.SOUTH;
+//		}else if(/*isInThisInterval(rec.left, p1.getPirateBuffer().centerX(), rec.right) && */p1.getPirateBuffer().centerY()>rec.centerY()){
+//			p1.gravity = Direction.NORTH;
+//		}else if(/*isInThisInterval(rec.top, p1.getPirateBuffer().centerY(), rec.bottom) && */p1.getPirateBuffer().centerX()<rec.centerX()){
+//			p1.gravity = Direction.EAST;
+//		}else if(/*isInThisInterval(rec.top, p1.getPirateBuffer().centerY(), rec.bottom) && */p1.getPirateBuffer().centerX()>rec.centerX()){
+//			p1.gravity = Direction.WEST;
+//		}else{
+//			Log.e("PiratesMadness", "Error when pirate change its gravity");
+//		}
+		changeDirection(p1, checkGravity(p1, rec));
+		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
+	}
+	
+	private Direction checkGravity(Pirate p, Rect r){
+		Rect r2 = p.getPirateBuffer();
+		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
+		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
+		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
+		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
+		if(r2.bottom>r.top && r2.right>=r.left && r2.top<r.bottom && r2.left<r.left)
+			return Direction.EAST;
+		if(r2.bottom>=r.top && r2.right>r.left && r2.left<r.right && r2.top<r.top)
+			return Direction.SOUTH;
+		if(r2.top<=r.bottom && r2.left<r.right && r2.right>r.left && r2.bottom>r.bottom)
+			return Direction.NORTH;
+		return Direction.WEST;
 	}
 
 	private boolean hitWall(Rect obstacle, Pirate p1){
 		if(Rect.intersects(obstacle, p1.getPirateBuffer())){
 			//If no gravity : jumping
 			if(p1.noGravity){
-				//hiqt a wall when jumping
+				//hit a wall when jumping
 				changeGravity(p1,obstacle);
 				p1.noGravity = false;
 			}
@@ -117,5 +132,13 @@ public class ImpactController {
 
 	private static boolean isInThisInterval(float min, float val, float max){
 		return min<=val && val<=max;
+	}
+	
+	public void changeDirection(Pirate p, Direction newGravity){
+		//!p.direction.isOpposite(newGravity) && 
+		if(newGravity != p.gravity){
+			p.direction = p.gravity;
+		}
+		p.gravity = newGravity;
 	}
 }
