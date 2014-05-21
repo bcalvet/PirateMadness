@@ -47,7 +47,7 @@ public class IAController {
 		}
 	}
 	
-	private void startingToJump(Pirate p){
+	public void startingToJump(Pirate p){
 		p.speedAcceleration=(float) -1.6;
 	}
 	
@@ -82,10 +82,9 @@ public class IAController {
 		//Check if pirates hit together
 
 		//Check if speedAcceleration is finished or not And so the gravity
-	};
+	}
 
-	
-	
+		
 //	//If pirate is jumping : direction =  gravity
 //	public void changeDirection(Pirate p, Direction newGravity){
 //		if(!p.direction.isOpposite(newGravity)){

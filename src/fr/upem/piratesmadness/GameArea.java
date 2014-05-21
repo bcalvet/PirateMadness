@@ -8,8 +8,11 @@ import android.graphics.Paint.Style;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnTouchListener;
 
 public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	BattleGround bg;
@@ -26,12 +29,33 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		MainActivity main = (MainActivity) getContext();
 		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
-
-		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
+		
 
 		//Initialization of the IAController too
 		final IAController ia = new IAController();
 		final ImpactController impactController = new ImpactController(); 
+		
+		OnTouchListener otl = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				int id = -1;
+				if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
+					if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
+						id = 1;
+				} else if(bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
+					if(!bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
+						id = 2;
+				}
+				if(id!=-1){
+					ia.startingToJump(bg.arrayPirates.get(id));
+				}
+				return true;
+			}
+		};
+		this.setOnTouchListener(otl);
+
+		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
+
 		workerThread = new Thread(new Runnable() {
 			
 			@Override
