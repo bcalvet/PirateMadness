@@ -73,20 +73,14 @@ public class FragmentMain extends Fragment{
 			public void onClick(final View v) {
 				bScore.setEnabled(false);
 				bSettings.setEnabled(false);
+
+				final Intent b = getActivity().getIntent();
+				
 				new Thread(new Runnable() {
 
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						//debug
-						Intent b = getActivity().getIntent();
-						b.putExtra("mode", 1);
-						b.putExtra("pirate1_drawable", R.drawable.pirate1);
-						b.putExtra("pirate2_drawable", R.drawable.pirate2);
-						b.putExtra("width", main_view.getWidth());
-						b.putExtra("height", main_view.getHeight());
-						b.putExtra("file_map", "3");
-						//end debug
 						if(BattleGround.landScape((MainActivity)getActivity(), "1")){
 							b.putExtra("reload", true);
 							main.runOnUiThread(new Runnable() {
@@ -106,6 +100,14 @@ public class FragmentMain extends Fragment{
 						}
 					}
 				}).start();
+				//debug
+				b.putExtra("mode", 1);
+				b.putExtra("pirate1_drawable", R.drawable.pirate1);
+				b.putExtra("pirate2_drawable", R.drawable.pirate2);
+				b.putExtra("width", main_view.getWidth());
+				b.putExtra("height", main_view.getHeight());
+				b.putExtra("file_map", "3");
+				//end debug
 				ft.replace(android.R.id.content, new FragmentGame());
 				ft.addToBackStack(null);
 				ft.commit();

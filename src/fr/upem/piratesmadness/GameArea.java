@@ -20,12 +20,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public GameArea(Context context, AttributeSet attrs) {
 		super(context, attrs);
-//		Log.d("PiratesMadness","GameArea");
 		getHolder().addCallback(this);
-//		if(bg==null){
-//			Log.e("pirate", "damned!");
-//			((Activity)getContext()).finish();
-//		}
 		MainActivity main = (MainActivity) getContext();
 		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
@@ -38,6 +33,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		OnTouchListener otl = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
+				Log.d("PiratesMadness","évènement dans le onTouch");
 				int id = -1;
 				if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 					if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))

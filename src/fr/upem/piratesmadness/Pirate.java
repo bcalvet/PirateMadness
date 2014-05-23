@@ -1,9 +1,12 @@
 package fr.upem.piratesmadness;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Bundle;
 
 public class Pirate {
 	Point coordinate;
@@ -18,6 +21,7 @@ public class Pirate {
 	final Rect padBuffer;
 	Rect pirateBuffer = new Rect(0,0,0,0);
 	Activity ga;
+	
 	
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face) {
 		int width = activity.getIntent().getExtras().getInt("width");
@@ -59,5 +63,20 @@ public class Pirate {
 	@Override
 	public String toString() {
 		return "Pirate "+name+"; coordinate(x,y) : ("+coordinate.x+","+coordinate.y+"); texture (height & width) : "+texture.getHeight()+";"+texture.getWidth()+"; gravity : "+noGravity+"; gravity sens : "+gravity+"; direction : "+direction+ "speed : "+speed+"; speedAcceleration : "+speedAcceleration+"; padBuffer : "+padBuffer.flattenToString();
+	}
+
+	public static ArrayList<Pirate> createPirates(ArrayList<Point> arrayPoints, MainActivity activity, float width, float height) {
+		// TODO Auto-generated method stub
+		ArrayList<Pirate> arrayPirates = new ArrayList<Pirate>();
+		Bundle extras = activity.getIntent().getExtras();
+		for(int i=0; i<arrayPoints.size(); i++){
+			arrayPirates.add(new Pirate(arrayPoints.get(i), activity, 0, 
+					BattleGround.rescaledBitmap(activity,
+							width,
+							height,
+							extras.getInt("pirate"+i+"_drawable")
+					)));
+		}
+		return arrayPirates;
 	}
 }

@@ -3,6 +3,7 @@ package fr.upem.piratesmadness;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -36,8 +37,7 @@ public class BattleGround {
 			int height = 0;
 			SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 			ArrayList<Pirate> pirates = new ArrayList<Pirate>();
-			Point pirate1 = new Point();
-			Point pirate2 = new Point();
+			ArrayList<Point> arrayPoints = new ArrayList<Point>();
 			float new_width;
 			float new_height;
 
@@ -50,13 +50,14 @@ public class BattleGround {
 				for (char c : line.toCharArray()) { //while pour perf
 					ArrayList<Integer> current = map.get(height,
 							new ArrayList<Integer>());
-					if (c == 'x'){
+					switch (x) {
+					case 'c':
 						current.add(x);
-					}else if(c == '1' || c == '2'){ // A modifier pour plus de joueurs
-						if(Integer.parseInt(Character.toString(c))==1)
-							pirate1 = new Point(x, height);
-						else
-							pirate2 = new Point(x, height);
+						break;
+					case ' ':
+						break;
+					default:
+						arrayPoints.add(new Point(x,height));
 					}
 					map.put(height, current);
 					x++;
@@ -71,47 +72,47 @@ public class BattleGround {
 				throw new IllegalStateException();
 
 			bg.isLandscape = bg.width>height;
-			if(bg.isLandscape = bg.width>height){
+			if(bg.isLandscape = bg.width>height)
 				activity.getIntent().putExtra("landscape", true);
-				//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-			}else{
+			else
 				activity.getIntent().putExtra("landscape", false);
-				//				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-			}
+
 
 			new_width = (float)activity.getIntent().getExtras().getInt("width") / (float)(bg.width);
 			new_height = (float)activity.getIntent().getExtras().getInt("height") / (float)(bg.height);
 
 			bg.texture = rescaledBitmap(activity, new_width, new_height, R.drawable.wall);
 
-			//			activity.getResources().getDrawable(extras.getInt("pirate1_drawable"));
-			pirates.add(
-					new Pirate(
-							new Point((int)(pirate1.x*new_width),
-									(int)(pirate1.y*new_height)),
-									activity,
-									0,
-									rescaledBitmap(activity,
-											new_width,
-											new_height,
-											extras.getInt("pirate1_drawable")
-											)
-							)
-					);
-			pirates.add(
-					new Pirate(
-							new Point((int)(pirate2.x*new_width),
-									(int)(pirate2.y*new_height)),
-									activity,
-									0,
-									rescaledBitmap(activity,
-											new_width,
-											new_height,
-											extras.getInt("pirate2_drawable")
-											)
-							)
-					);
-			bg.arrayPirates = pirates;
+
+			//Utiliser la factorie pour créer une ArrayList<Pirate>
+			//		pirates.add(
+			//				new Pirate(
+			//						new Point((int)(pirate1.x*new_width),
+			//								(int)(pirate1.y*new_height)),
+			//								activity,
+			//								0,
+			//								rescaledBitmap(activity,
+			//										new_width,
+			//										new_height,
+			//										extras.getInt("pirate1_drawable")
+			//										)
+			//						)
+			//				);
+			//		pirates.add(
+			//				new Pirate(
+			//						new Point((int)(pirate2.x*new_width),
+			//								(int)(pirate2.y*new_height)),
+			//								activity,
+			//								0,
+			//								rescaledBitmap(activity,
+			//										new_width,
+			//										new_height,
+			//										extras.getInt("pirate2_drawable")
+			//										)
+			//						)
+			//				);
+			//		bg.arrayPirates = pirates;
+			bg.arrayPirates = Pirate.createPirates(arrayPoints, activity, new_width, new_height);
 
 			//Translating map to background
 			for (int i = 0; i < ((bg.isLandscape)?bg.width:bg.height); i++) {
@@ -125,26 +126,26 @@ public class BattleGround {
 			}
 
 			//Refactoring background
-//			int checked = 1;
-//			while(checked!=0){
-//				checked = 0;
-//				for(Rect r1 : bg.obstacles){
-//					for(Rect r2 : bg.obstacles){
-//						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
-//							bg.obstacles.remove(r1);
-//							bg.obstacles.remove(r2);
-//							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
-//							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
-//							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
-//							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
-//							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
-//							checked++;
-//							break;
-//						}
-//					}
-//				}
-//			}
-			
+			//			int checked = 1;
+			//			while(checked!=0){
+			//				checked = 0;
+			//				for(Rect r1 : bg.obstacles){
+			//					for(Rect r2 : bg.obstacles){
+			//						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
+			//							bg.obstacles.remove(r1);
+			//							bg.obstacles.remove(r2);
+			//							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
+			//							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
+			//							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
+			//							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
+			//							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
+			//							checked++;
+			//							break;
+			//						}
+			//					}
+			//				}
+			//			}
+
 			return bg;
 		} catch (IOException ise) {
 			Log.e("pirate", "Can't parse level file!");
@@ -156,7 +157,7 @@ public class BattleGround {
 		return null;
 	}
 
-	private static Bitmap rescaledBitmap(MainActivity ga, float new_width, float new_height, int drawable){
+	static Bitmap rescaledBitmap(MainActivity ga, float new_width, float new_height, int drawable){
 		Bitmap basic = BitmapFactory.decodeResource(ga.getResources(),
 				drawable);
 		Matrix matrix = new Matrix();
