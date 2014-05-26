@@ -3,6 +3,7 @@ package fr.upem.piratesmadness;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
@@ -108,7 +109,8 @@ AsyncTask<String, String, BattleGround> {
 											new_width,
 											new_height,
 											activity.getIntent().getExtras().getInt("pirate1_drawable")
-											)
+											),
+											1
 							)
 					);
 			pirates.add(
@@ -121,7 +123,8 @@ AsyncTask<String, String, BattleGround> {
 											new_width,
 											new_height,
 											activity.getIntent().getExtras().getInt("pirate2_drawable")
-											)
+											),
+											2
 							)
 					);
 			bg.arrayPirates = pirates;

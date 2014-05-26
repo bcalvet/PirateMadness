@@ -3,9 +3,7 @@ package fr.upem.piratesmadness;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -37,7 +35,11 @@ public class BattleGround {
 			int height = 0;
 			SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 			ArrayList<Pirate> pirates = new ArrayList<Pirate>();
-			ArrayList<Point> arrayPoints = new ArrayList<Point>();
+			Point pirate1 = new Point();
+			Point pirate2 = new Point();
+
+			//			ArrayList<Point> arrayPoints = new ArrayList<Point>();
+
 			float new_width;
 			float new_height;
 
@@ -50,14 +52,23 @@ public class BattleGround {
 				for (char c : line.toCharArray()) { //while pour perf
 					ArrayList<Integer> current = map.get(height,
 							new ArrayList<Integer>());
-					switch (x) {
-					case 'c':
+					//					switch (c) {
+					//					case 'x':
+					//						current.add(c);
+					//						break;
+					//					case ' ':
+					//						break;
+					//					default:
+					//						arrayPoints.add(new Point(x,height));
+					//					}
+
+					if (c == 'x'){
 						current.add(x);
-						break;
-					case ' ':
-						break;
-					default:
-						arrayPoints.add(new Point(x,height));
+					}else if(c == '1' || c == '2'){ // A modifier pour plus de joueurs
+						if(Integer.parseInt(Character.toString(c))==1)
+							pirate1 = new Point(x, height);
+						else
+							pirate2 = new Point(x, height);
 					}
 					map.put(height, current);
 					x++;
@@ -85,34 +96,36 @@ public class BattleGround {
 
 
 			//Utiliser la factorie pour créer une ArrayList<Pirate>
-			//		pirates.add(
-			//				new Pirate(
-			//						new Point((int)(pirate1.x*new_width),
-			//								(int)(pirate1.y*new_height)),
-			//								activity,
-			//								0,
-			//								rescaledBitmap(activity,
-			//										new_width,
-			//										new_height,
-			//										extras.getInt("pirate1_drawable")
-			//										)
-			//						)
-			//				);
-			//		pirates.add(
-			//				new Pirate(
-			//						new Point((int)(pirate2.x*new_width),
-			//								(int)(pirate2.y*new_height)),
-			//								activity,
-			//								0,
-			//								rescaledBitmap(activity,
-			//										new_width,
-			//										new_height,
-			//										extras.getInt("pirate2_drawable")
-			//										)
-			//						)
-			//				);
-			//		bg.arrayPirates = pirates;
-			bg.arrayPirates = Pirate.createPirates(arrayPoints, activity, new_width, new_height);
+			pirates.add(
+					new Pirate(
+							new Point((int)(pirate1.x*new_width),
+									(int)(pirate1.y*new_height)),
+									activity,
+									0,
+									rescaledBitmap(activity,
+											new_width,
+											new_height,
+											extras.getInt("pirate1_drawable")
+											),
+											1
+							)
+					);
+			pirates.add(
+					new Pirate(
+							new Point((int)(pirate2.x*new_width),
+									(int)(pirate2.y*new_height)),
+									activity,
+									0,
+									rescaledBitmap(activity,
+											new_width,
+											new_height,
+											extras.getInt("pirate2_drawable")
+											),
+											2
+							)
+					);
+			bg.arrayPirates = pirates;
+			//			bg.arrayPirates = Pirate.createPirates(arrayPoints, activity, new_width, new_height);
 
 			//Translating map to background
 			for (int i = 0; i < ((bg.isLandscape)?bg.width:bg.height); i++) {
