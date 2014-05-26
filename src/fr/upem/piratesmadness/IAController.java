@@ -2,7 +2,6 @@ package fr.upem.piratesmadness;
 
 import java.util.ArrayList;
 
-import android.graphics.Rect;
 import android.util.Log;
 
 public class IAController {
@@ -26,8 +25,8 @@ public class IAController {
 				break;
 			}
 			//change speedAcceleration
-			if(pirate.speedAcceleration!=1.6 && pirate.speedAcceleration!=1 && pirate.speedAcceleration!=-1.6){
-				pirate.speedAcceleration+=0.4;
+			if(pirate.speedAcceleration!=1.6 && pirate.speedAcceleration!=-1.6){
+				pirate.speedAcceleration+=0.1;
 			}
 		}
 		switch (pirate.direction) {
@@ -49,6 +48,7 @@ public class IAController {
 	
 	public void startingToJump(Pirate p){
 		p.speedAcceleration=(float) -1.6;
+		p.noGravity=true;
 	}
 	
 	
