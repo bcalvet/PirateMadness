@@ -9,6 +9,8 @@ public class IAController {
 
 	private void move(Pirate pirate){
 		if(pirate.noGravity){
+			if(pirate.speed>=0)pirate.actualy=-1;
+				
 			//Jumping : sometimes or Falling : sometimes
 			switch (pirate.gravity) {
 			case NORTH:
@@ -24,8 +26,12 @@ public class IAController {
 				pirate.coordinate.y+=pirate.speed*pirate.speedAcceleration;
 				break;
 			}
+			//Hack : needed to use variable speedAcceleration with value set 1
+			if(pirate.speedAcceleration==1 && pirate.noGravity){
+				pirate.speedAcceleration+=0.1;
+			}
 			//change speedAcceleration
-			if(pirate.speedAcceleration!=1.6 && pirate.speedAcceleration!=-1.6){
+			if(pirate.speedAcceleration!=1.6 && pirate.speedAcceleration!=1 && pirate.speedAcceleration!=-1.6){
 				pirate.speedAcceleration+=0.1;
 			}
 		}

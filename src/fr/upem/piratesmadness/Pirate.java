@@ -18,8 +18,9 @@ public class Pirate {
 	Direction direction;
 	final Rect padBuffer;
 	Rect pirateBuffer = new Rect(0,0,0,0);
-	Activity ga;
+	Rect origin;
 	int actualy;
+	Activity ga;
 
 
 
@@ -51,33 +52,59 @@ public class Pirate {
 		noGravity=true;
 		name=String.valueOf(number);
 		actualy=-1;
+//		origin=null;
 	}
 
 	public boolean isActually(Rect rec){
+//		int plop = -1;
+//		boolean result=false;
+//		float val = Math.abs(speedAcceleration);
 		switch (gravity) {
 		case NORTH:
+//			plop = rec.bottom;
+//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.bottom, actualy+(speed+val));
+//			break;
 			return rec.bottom==actualy;
 		case SOUTH:
-			return rec.top==actualy;
+//			plop = rec.top;
+//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.top, actualy+(speed+val));
+//			break;
+			return rec.top == actualy;
 		case EAST:
+//			plop = rec.left;
+//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.left, actualy+(speed+val));
+//			break;
 			return rec.left==actualy;
 		case WEST:
-			return rec.right==actualy;
+//			plop = rec.right;
+//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.right, actualy+(speed+val));
+//			break;
+			return  rec.right==actualy;
 		}
+//		Log.d("Pirate", "gravity : " + gravity + " actually " +actualy + " compared to " + plop+"; result : "+result);
+//		return result;
+//		return rec==origin;
 		return false;
 	}
 	
 	public void setActually(Rect rec){
+//		Log.d("PiratesMadness","old actualy : "+actualy+"; gravity : "+gravity);
 		switch (gravity) {
 		case NORTH:
 			actualy = rec.bottom;
+			break;
 		case SOUTH:
 			actualy = rec.top;
+			break;
 		case EAST:
 			actualy = rec.left;
+			break;
 		case WEST:
 			actualy = rec.right;
+			break;
 		}
+//		Log.d("PiratesMadness","rect : "+rec.flattenToString()+"; new actually : "+actualy);
+//		this.origin = rec;
 	}
 
 	public Rect getPiratePadBuffer(){

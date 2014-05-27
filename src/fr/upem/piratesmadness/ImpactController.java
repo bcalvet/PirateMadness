@@ -28,11 +28,13 @@ public class ImpactController {
 			fall(p1);
 		if(!p2NotFalling)
 			fall(p2);
+		hit(p1,p2);
 	}
 
 	private void fall(Pirate p1) {
 		Log.d("PiratesMadness","fall");
-		p1.speedAcceleration=(float)1.6;
+		// With set speedAcceleration 1.1, speedAcceleration increase to 1.6 by step 1.1
+		p1.speedAcceleration=(float)1.1;
 		p1.noGravity=true;
 	}
 
@@ -42,27 +44,30 @@ public class ImpactController {
 		case NORTH : p1.direction = Direction.SOUTH; break;
 		case SOUTH : p1.direction = Direction.NORTH; break;
 		case EAST : p1.direction = Direction.WEST; break;
-		default : p1.direction = Direction.EAST; break;
+		case WEST : p1.direction = Direction.EAST; break;
+		}
+		//Security : check if the pirate bug - postTraitement
+		if(p1.direction.isOpposite(p1.gravity)){
+			p1.direction.randomDirection(p1);
 		}
 	}
 
 	private boolean changeGravity(Pirate p1, Rect rec){
-		Log.d("PiratesMadness","changeGravity");
-		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
+//		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
 		Direction tmp = checkGravity(p1, rec);
-		Log.d("PiratesMadness", "checkGravity : "+tmp);
+//		Log.d("PiratesMadness", "checkGravity : "+tmp);
 		boolean result = changeDirection(p1, tmp);
-		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
+//		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
 		return result;
 	}
 
 	private Direction checkGravity(Pirate p, Rect r){
-		Log.d("PiratesMadness","checkGravity");
+//		Log.d("PiratesMadness","checkGravity");
 		Rect r2 = p.getPirateBuffer();
-		//		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
-		//		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
-		//		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
-		//		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
+//		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
+//		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
+//		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
+//		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
 		if(r2.bottom>r.top && r2.right>=r.left && r2.top<r.bottom && r2.left<r.left)
 			return Direction.EAST;
 		if(r2.bottom>=r.top && r2.right>r.left && r2.left<r.right && r2.top<r.top)
@@ -74,30 +79,32 @@ public class ImpactController {
 
 
 	private boolean hitWall(Rect obstacle, Pirate p1){
-//		Log.d("PiratesMadness","hitWall");
+		//		Log.d("PiratesMadness","hitWall");
 		if(Rect.intersects(obstacle, p1.getPirateBuffer())){
 			if(!p1.isActually(obstacle)){
-				//If no gravity : jumping
-				if(p1.noGravity){
-					//hit a wall when jumping
-					if(changeGravity(p1,obstacle)){
-						p1.noGravity = false;
-						p1.setActually(obstacle);
-						switch (p1.gravity) {
-						case NORTH:
-							p1.coordinate.y=obstacle.bottom+p1.getPirateBuffer().height();
-							break;
-						case SOUTH:
-							p1.coordinate.y=obstacle.top-p1.getPirateBuffer().height();
-							break;
-						case EAST:
-							p1.coordinate.x=obstacle.left-p1.getPirateBuffer().width();
-							break;
-						case WEST:
-							p1.coordinate.x=obstacle.right+p1.getPirateBuffer().width();
-							break;
-						}
+				//hit a wall when jumping
+//				Log.d("PiratesMadness","noGravity : "+p1.noGravity);
+				if(p1.noGravity && changeGravity(p1,obstacle)){
+					p1.noGravity = false;
+					p1.setActually(obstacle);
+					//Correction of the pirateBuffer position.
+					switch (p1.gravity) {
+					case NORTH:
+						p1.coordinate.y=obstacle.bottom+(p1.getPirateBuffer().height()/2)-1;
+						break;
+					case SOUTH:
+						p1.coordinate.y=obstacle.top-(p1.getPirateBuffer().height()/2)+1;
+						break;
+					case EAST:
+						p1.coordinate.x=obstacle.left-(p1.getPirateBuffer().width()/2)+1;
+						break;
+					case WEST:
+						p1.coordinate.x=obstacle.right+(p1.getPirateBuffer().width()/2)-1;
+						break;
 					}
+					//Set speedAcceleration 1
+					p1.speedAcceleration=1;
+					
 				}
 				//que le mur perpendiculaire à la gravité du pirate
 				else{
@@ -119,7 +126,7 @@ public class ImpactController {
 	}
 
 	private boolean isPerpendicular(Rect obstacle, Pirate p1) {
-		Log.d("PiratesMadness","isPerpendicular");
+		//		Log.d("PiratesMadness","isPerpendicular");
 		switch (p1.direction) {
 		case NORTH:
 			return isInThisInterval(obstacle.left, p1.getPirateBuffer().centerX(), obstacle.right);
@@ -136,10 +143,20 @@ public class ImpactController {
 	}
 
 	private void hit(Pirate p1, Pirate p2){
-
+		if(Rect.intersects(p1.getPirateBuffer(), p2.getPirateBuffer())){
+			if(p1.speed+Math.abs(p1.speedAcceleration)>p2.speed+Math.abs(p2.speedAcceleration)){
+				p2.life--;
+			}
+			if(p1.speed+Math.abs(p1.speedAcceleration)<p2.speed+Math.abs(p2.speedAcceleration)){
+				p1.life--;
+			}
+			bounce(p1);
+			bounce(p2);
+			Log.d("PiratesMadness", "Life p1 : "+p1.life+"; life p2 : "+p2.life);
+		}
 	}
 
-	private static boolean isInThisInterval(float min, float val, float max){
+	static boolean isInThisInterval(float min, float val, float max){
 		return min<=val && val<=max;
 	}
 

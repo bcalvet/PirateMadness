@@ -32,7 +32,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					Log.d("PiratesMadness","évènement dans le onTouch");
+//					Log.d("PiratesMadness","évènement dans le onTouch");
 					int id = -1;
 					if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
@@ -66,10 +66,10 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					if(pirate.gravity==null)
 						pirate.gravity=Direction.SOUTH;
 					pirate.gravity.randomDirection(pirate);
-					Log.d("PiratesMadness",pirate.toString());
+//					Log.d("PiratesMadness",pirate.toString());
 				}
 				//Infinity cycle to move and update information
-				while(!Thread.interrupted()){
+				while(!Thread.currentThread().isInterrupted()){
 					SurfaceHolder holder = ga.getHolder();
 					impactController.update(bg);
 					ia.update(bg);
