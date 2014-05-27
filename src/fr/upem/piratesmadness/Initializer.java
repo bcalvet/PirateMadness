@@ -1,6 +1,5 @@
 package fr.upem.piratesmadness;
 
-import fr.upem.piratesmadness.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;

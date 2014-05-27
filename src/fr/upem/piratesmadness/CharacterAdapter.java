@@ -1,6 +1,5 @@
 package fr.upem.piratesmadness;
 
-import fr.upem.piratesmadness.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

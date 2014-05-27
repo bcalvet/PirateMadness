@@ -1,12 +1,9 @@
 package fr.upem.piratesmadness;
 
 
-import fr.upem.piratesmadness.R;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 
 public class MainActivity extends Activity {
 	BattleGroundInitializer asyncTask;
