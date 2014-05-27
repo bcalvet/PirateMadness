@@ -83,6 +83,20 @@ public class ImpactController {
 					if(changeGravity(p1,obstacle)){
 						p1.noGravity = false;
 						p1.setActually(obstacle);
+						switch (p1.gravity) {
+						case NORTH:
+							p1.coordinate.y=obstacle.bottom+p1.getPirateBuffer().height();
+							break;
+						case SOUTH:
+							p1.coordinate.y=obstacle.top-p1.getPirateBuffer().height();
+							break;
+						case EAST:
+							p1.coordinate.x=obstacle.left-p1.getPirateBuffer().width();
+							break;
+						case WEST:
+							p1.coordinate.x=obstacle.right+p1.getPirateBuffer().width();
+							break;
+						}
 					}
 				}
 				//que le mur perpendiculaire à la gravité du pirate
