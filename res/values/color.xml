@@ -5,5 +5,5 @@
     <color name="Black">#000</color>
     <color name="blue">#300F</color>
     <color name="red">#3F00</color>
-    
+    <color name="grey">#30CECECE</color>
 </resources>
