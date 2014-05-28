@@ -2,6 +2,8 @@ package fr.upem.piratesmadness;
 
 import java.util.Random;
 
+import android.text.format.Time;
+
 public enum Direction {
 	NORTH {
 		@Override
@@ -13,7 +15,10 @@ public enum Direction {
 		@Override
 		public void randomDirection(Pirate p) {
 			Random random = new Random();
-			if(random.nextInt(8)%2==0){
+			Time time = new Time();
+			time.setToNow();
+			//Adding 1 avoid illegalArgumentException in nextInt due to 0.
+			if(random.nextInt(time.second+1)%2==0){
 				p.direction=WEST;
 			}else{
 				p.direction=EAST;
@@ -36,7 +41,10 @@ public enum Direction {
 		@Override
 		public void randomDirection(Pirate p) {
 			Random random = new Random();
-			if(random.nextInt(8)%2==0){
+			Time time = new Time();
+			time.setToNow();
+			//Adding 1 avoid illegalArgumentException in nextInt due to 0.
+			if(random.nextInt(time.second+1)%2==0){
 				p.direction=NORTH;
 			}else{
 				p.direction=SOUTH;
@@ -59,7 +67,10 @@ public enum Direction {
 		@Override
 		public void randomDirection(Pirate p) {
 			Random random = new Random();
-			if(random.nextInt(8)%2==0){
+			Time time = new Time();
+			time.setToNow();
+			//Adding 1 avoid illegalArgumentException in nextInt due to 0.
+			if(random.nextInt(time.second+1)%2==0){
 				p.direction=WEST;
 			}else{
 				p.direction=EAST;
@@ -82,7 +93,10 @@ public enum Direction {
 		@Override
 		public void randomDirection(Pirate p) {
 			Random random = new Random();
-			if(random.nextInt(8)%2==0){
+			Time time = new Time();
+			time.setToNow();
+			//Adding 1 avoid illegalArgumentException in nextInt due to 0.
+			if(random.nextInt(time.second+1)%2==0){
 				p.direction=NORTH;
 			}else{
 				p.direction=SOUTH;

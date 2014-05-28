@@ -18,10 +18,13 @@ public class MainActivity extends Activity {
     protected void onResume() {
     	super.onResume();
 		//init
-		if(getIntent().getExtras()==null || getIntent().getExtras().getString("file_map")==null){
+		if(getIntent().getExtras()==null){
 	    	getIntent().putExtra("mode", 1);
 			getIntent().putExtra("pirate1_drawable", R.drawable.pirate1);
 			getIntent().putExtra("pirate2_drawable", R.drawable.pirate2);
+			getIntent().putExtra("file_map", "1");
+		}
+		if(getIntent().getExtras().getString("file_map")==null){
 			getIntent().putExtra("file_map", "1");
 		}
 		//init

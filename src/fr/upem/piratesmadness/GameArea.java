@@ -131,7 +131,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			}else{
 				p.setColor(getContext().getResources().getColor(R.color.blue));
 			}
-//			canvas.drawRect(pirate.getPiratePadBuffer(), p);
+			canvas.drawRect(pirate.getPiratePadBuffer(), p);
 		}
 	}
 }

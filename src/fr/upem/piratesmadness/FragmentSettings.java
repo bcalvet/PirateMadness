@@ -61,7 +61,7 @@ public class FragmentSettings extends Fragment {
 		iv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((MainActivity)v.getContext()).getIntent().putExtra("file_map", mapId);
+				((MainActivity)v.getContext()).getIntent().putExtra("file_map", String.valueOf(mapId));
 				Log.d("pirateMadness", "player choose map " + mapId);
 			}
 		});
