@@ -1,14 +1,10 @@
 package fr.upem.piratesmadness;
 
 import java.util.ArrayList;
-import java.util.Timer;
-
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.text.format.Time;
 import android.util.Log;
-import android.util.TimeUtils;
 
 public class ImpactController {
 
@@ -27,7 +23,6 @@ public class ImpactController {
 			//test if the pirates hit each other
 			//			hit();
 			//test if there is a wall or not under the pirate : falling mode or pirate receipt mode
-
 		}
 		if(!p1NotFalling)
 			fall(p1);
@@ -58,21 +53,13 @@ public class ImpactController {
 	}
 
 	private boolean changeGravity(Pirate p1, Rect rec){
-		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
 		Direction tmp = checkGravity(p1, rec);
-		Log.d("PiratesMadness", "checkGravity : "+tmp);
 		boolean result = changeDirection(p1, tmp);
-		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
 		return result;
 	}
 
 	private Direction checkGravity(Pirate p, Rect r){
-		//		Log.d("PiratesMadness","checkGravity");
 		Rect r2 = p.getPirateBuffer();
-		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
-		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
-		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
-		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
 		if(r2.bottom>r.top && r2.right>=r.left && r2.top<r.bottom && r2.left<r.left)
 			return Direction.EAST;
 		if(r2.bottom>=r.top && r2.right>r.left && r2.left<r.right && r2.top<r.top)
@@ -82,10 +69,8 @@ public class ImpactController {
 		return Direction.WEST;
 	}
 
-
 	private boolean hitWall(Rect obstacle, Pirate p1){
 		Rect bufferOfPirate = p1.getPirateBuffer();
-		//		Log.d("PiratesMadness","hitWall");
 		if(Rect.intersects(obstacle, bufferOfPirate)){
 			//When intersects first time after jump set twiceJump true, because the player can rejump. But he as only one chance
 			p1.twiceJump++;
@@ -112,7 +97,6 @@ public class ImpactController {
 					}
 					//Set speedAcceleration 1
 					p1.speedAcceleration=1;
-
 				}
 				//que le mur perpendiculaire à la gravité du pirate
 				else{
@@ -130,12 +114,10 @@ public class ImpactController {
 		if(p1.noGravity){
 			return true;
 		}
-
 		return false;
 	}
 
 	private boolean isPerpendicular(Rect obstacle, Pirate p1) {
-		//		Log.d("PiratesMadness","isPerpendicular");
 		switch (p1.direction) {
 		case NORTH:
 			return isInThisInterval(obstacle.left, p1.getPirateBuffer().centerX(), obstacle.right);

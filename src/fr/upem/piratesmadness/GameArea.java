@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.text.format.Time;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,7 +20,6 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		MainActivity main = (MainActivity) getContext();
 		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
-
 
 		//Initialization of the IAController too
 		final IAController ia = new IAController();
@@ -73,7 +70,6 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					if(pirate.gravity==null)
 						pirate.gravity=Direction.SOUTH;
 					pirate.gravity.randomDirection(pirate);
-					//					Log.d("PiratesMadness",pirate.toString());
 				}
 				//Infinity cycle to move and update information
 				while(!Thread.currentThread().isInterrupted()){
@@ -117,8 +113,8 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			p.setColor(getContext().getResources().getColor(R.color.Black));
 			p.setStrokeWidth(2);
 			p.setStyle(Style.STROKE);
-			canvas.drawRect(bg.obstacles.get(i), p);
-			//			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
+//			canvas.drawRect(bg.obstacles.get(i), p);
+			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
 		}
 	}
 	private void drawPirate(Canvas canvas){
@@ -135,7 +131,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			}else{
 				p.setColor(getContext().getResources().getColor(R.color.blue));
 			}
-			canvas.drawRect(pirate.getPiratePadBuffer(), p);
+//			canvas.drawRect(pirate.getPiratePadBuffer(), p);
 		}
 	}
 }

@@ -5,9 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,19 +26,18 @@ public class FragmentMain extends Fragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		Bundle extras = this.getActivity().getIntent().getExtras();
 		if(extras==null) extras = new Bundle();
-		//		ImageButton bSound = (ImageButton) this.getActivity().findViewById(R.id.main_menu_sound);
-		//		Log.d("PiratesMadness", "button bSound : "+bSound.getId());
-		//		if(savedInstanceState!=null && savedInstanceState.getBowolean("sound"))bSound.setImageResource(R.drawable.sound_on);
-		//		else bSound.setImageResource(R.drawable.sound_off);
-		//		media = MediaPlayer.create(this, R.raw.neantitude_robin);
-		//		media.start();
-		//		media.setLooping(true);
-		//		Log.d("PiratesMadness", "vue main");
-		//		for(String k : extras.keySet()){
-		//			System.out.println("Key : "+k+"; value : "+extras.getString(k));
-		//		}
+//			ImageButton bSound = (ImageButton) this.getActivity().findViewById(R.id.main_menu_sound);
+//			Log.d("PiratesMadness", "button bSound : "+bSound.getId());
+//			if(savedInstanceState!=null && savedInstanceState.getBowolean("sound"))bSound.setImageResource(R.drawable.sound_on);
+//			else bSound.setImageResource(R.drawable.sound_off);
+//			media = MediaPlayer.create(this, R.raw.neantitude_robin);
+//			media.start();
+//			media.setLooping(true);
+//			Log.d("PiratesMadness", "vue main");
+//			for(String k : extras.keySet()){
+//				System.out.println("Key : "+k+"; value : "+extras.getString(k));
+//			}
 		View view = inflater.inflate(R.layout.fragment_main, null);
-		Log.d("PiratesMadness", "view inflated : "+view);
 		setButtonOnListener(extras, view);
 		return view;
 	}
@@ -63,45 +60,12 @@ public class FragmentMain extends Fragment{
 			public void onClick(final View v) {
 				bScore.setEnabled(false);
 				bSettings.setEnabled(false);
-
 				final Intent b = getActivity().getIntent();
-				
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						if(BattleGround.landScape((MainActivity)getActivity(), "1")){
-							b.putExtra("reload", true);
-							main.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									((MainActivity)getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-								}
-							});
-						}else{
-							b.putExtra("reload", true);
-							main.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									((MainActivity)getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-								}
-							});
-						}
-					}
-				}).start();
-				//debug
-				b.putExtra("mode", 1);
-				b.putExtra("pirate1_drawable", R.drawable.pirate1);
-				b.putExtra("pirate2_drawable", R.drawable.pirate2);
 				b.putExtra("width", main_view.getWidth());
 				b.putExtra("height", main_view.getHeight());
-				b.putExtra("file_map", "3");
-				//end debug
 				ft.replace(android.R.id.content, new FragmentGame());
 				ft.addToBackStack(null);
 				ft.commit();
-				//				final BattleGroundInitializer bgi = new BattleGroundInitializer((MainActivity)getActivity());
 			}
 		});
 		bSettings.setOnClickListener(new OnClickListener() {
@@ -138,16 +102,14 @@ public class FragmentMain extends Fragment{
 		});
 	}
 
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
-	}
+//	@Override
+//	public void onResume() {
+//		super.onResume();
+//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
+//	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("sound", sound);
 	}

@@ -2,29 +2,29 @@ package fr.upem.piratesmadness;
 
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class MainActivity extends Activity {
-	BattleGroundInitializer asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        this.getFragmentManager().beginTransaction().add(android.R.id.content, new FragmentMain()).commit();  
+        this.getFragmentManager().beginTransaction().add(android.R.id.content, new FragmentMain()).commit();
     }
 
     @Override
     protected void onResume() {
-    	// TODO Auto-generated method stub
     	super.onResume();
-    	if(getIntent().getExtras()!=null && getIntent().getExtras().getBoolean("reload")){
-    		getIntent().getExtras().putBoolean("reload", false);
-    		final FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(android.R.id.content, new FragmentGame());
-			ft.addToBackStack(null);
-			ft.commit();
-    	}
+		//init
+		if(getIntent().getExtras()==null || getIntent().getExtras().getString("file_map")==null){
+	    	getIntent().putExtra("mode", 1);
+			getIntent().putExtra("pirate1_drawable", R.drawable.pirate1);
+			getIntent().putExtra("pirate2_drawable", R.drawable.pirate2);
+			getIntent().putExtra("file_map", "1");
+		}
+		//init
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 }

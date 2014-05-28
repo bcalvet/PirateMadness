@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class Pirate {
 	Point coordinate;
@@ -121,7 +120,6 @@ public class Pirate {
 	}
 
 	//	public static ArrayList<Pirate> createPirates(ArrayList<Point> arrayPoints, MainActivity activity, float width, float height) {
-	//		// TODO Auto-generated method stub
 	//		ArrayList<Pirate> arrayPirates = new ArrayList<Pirate>();
 	//		Bundle extras = activity.getIntent().getExtras();
 	//		for(int i=0; i<arrayPoints.size(); i++){

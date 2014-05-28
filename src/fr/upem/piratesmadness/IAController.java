@@ -64,15 +64,6 @@ public class IAController {
 		p.twiceSpeedAcceleration=false;
 		p.noGravity=true;
 	}
-	
-	
-	private void showInformation(BattleGround bg){
-		for(Pirate p : bg.arrayPirates){
-			Log.d("PiratesMadness", "Pirate : "+p.name+"; coordinate, width :"+p.coordinate.x+"; height : "+p.coordinate.y+"; buffer : "+p.padBuffer.flattenToString());
-			Log.d("PiratesMadness","speed : "+p.speed+"; speed accélération : "+p.speedAcceleration+"; Direction : "+p.direction+"; gravity : "+p.gravity);
-		}
-	}
-	
 
 	public void update(BattleGround battleGround){
 		//DEBUG 

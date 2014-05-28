@@ -1,8 +1,5 @@
 package fr.upem.piratesmadness;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -28,7 +25,6 @@ public class FragmentSettings extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_settings, null);
 		setButtonOnListener(getActivity().getIntent().getExtras(), view);
 		LayoutParams params = new LayoutParams(200, LayoutParams.WRAP_CONTENT);
-		
 		/*Player 1 panel*/
 		LinearLayout player1 = (LinearLayout) view
 				.findViewById(R.id.player1_image);
@@ -50,17 +46,35 @@ public class FragmentSettings extends Fragment {
 		player2.addView(getPreconfiguredImageView(R.drawable.pirate5, params, 2));
 		player2.addView(getPreconfiguredImageView(R.drawable.pirate6, params, 2));
 		/*Map panel*/
-		
-		
+		LinearLayout map = (LinearLayout) view
+				.findViewById(R.id.map_image);
+		map.setBackgroundColor(getResources().getColor(R.color.grey));
+		map.addView(getPreconfiguredMapImageView(R.drawable.map1, params, 1));
+		map.addView(getPreconfiguredMapImageView(R.drawable.map3, params, 3));
 		return view;
 	}
 
+	private ImageView getPreconfiguredMapImageView(final int drawableId,
+			LayoutParams params, final int mapId) {
+		ImageView iv = new ImageView(getActivity());
+		iv.setClickable(true);
+		iv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((MainActivity)v.getContext()).getIntent().putExtra("file_map", mapId);
+				Log.d("pirateMadness", "player choose map " + mapId);
+			}
+		});
+		iv.setLayoutParams(params);
+		iv.setImageResource(drawableId);
+		return iv;
+	}
+	
 	private ImageView getPreconfiguredImageView(final int drawableId,
 			LayoutParams params, final int playerId) {
 		ImageView iv = new ImageView(getActivity());
 		iv.setClickable(true);
 		iv.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				((MainActivity)v.getContext()).getIntent().putExtra("pirate" + playerId + "_drawable", drawableId);
@@ -75,22 +89,20 @@ public class FragmentSettings extends Fragment {
 	private void setButtonOnListener(final Bundle savedInstanceState, View v) {
 		final FragmentManager fm = getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
-		Button bPlay = (Button) v.findViewById(R.id.button_play);
-		bPlay.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ft.replace(android.R.id.content, new FragmentGame());
-				ft.addToBackStack(null);
-				ft.commit();
-			}
-		});
+//		Button bPlay = (Button) v.findViewById(R.id.button_play);
+//		bPlay.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				ft.replace(android.R.id.content, new FragmentGame());
+//				ft.addToBackStack(null);
+//				ft.commit();
+//			}
+//		});
 		Button bMenu = (Button) v.findViewById(R.id.button_menu);
 		bMenu.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				Log.d("PiratesMadness", "vue fragment menu");
+//				Log.d("PiratesMadness", "vue fragment menu");
 				ft.replace(android.R.id.content, new FragmentMain());
 				ft.addToBackStack(null);
 				ft.commit();
@@ -98,7 +110,6 @@ public class FragmentSettings extends Fragment {
 		});
 		Button bScore = (Button) v.findViewById(R.id.button_score_board);
 		bScore.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				ft.replace(android.R.id.content, new FragmentScoreBoard());
@@ -110,7 +121,6 @@ public class FragmentSettings extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		// utilisé saveParam pour ajouter les données
 		saveParam(outState, getView());
@@ -161,42 +171,4 @@ public class FragmentSettings extends Fragment {
 		data.putBoolean("sound", sound);
 		return data;
 	}
-
-	private CharacterItem[] createListOfCharacter() {
-		Scanner scan;
-		CharacterItem[] listofCharacter;
-		try {
-			scan = new Scanner(this.getActivity().getAssets()
-					.open("character_name"));
-			if (!scan.hasNext()) {
-				Log.e("PiratesMadness - PersonnageActivity - createListOfCharacter",
-						"le fichier est incorrect");
-				System.exit(-1);
-			}
-			// Modifier la suite : créer une liste et stocker chacun des
-			// CharacterItem.
-			// Puis retransformer cette liste en tableau.
-			int size = Integer.parseInt(scan.nextLine().trim());
-			listofCharacter = new CharacterItem[size];
-			int i = 0;
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine();
-				int id = getResources().getIdentifier(
-						line.substring(0, line.indexOf(" ")), "drawable",
-						this.getActivity().getPackageName());
-				String name = line.substring(line.indexOf(" "));
-				listofCharacter[i] = new CharacterItem(id, name);
-				i++;
-			}
-			scan.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e("PiratesMadness - PersonnageActivity - createListOfCharacter",
-					"error with the file");
-			e.printStackTrace();
-			listofCharacter = null;
-		}
-		return listofCharacter;
-	}
-
 }

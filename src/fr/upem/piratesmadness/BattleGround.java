@@ -25,7 +25,6 @@ public class BattleGround {
 	int difficulty;
 	ArrayList<Pirate> arrayPirates;
 
-
 	static BattleGround initGame(MainActivity activity) {
 		try {			
 			BattleGround bg = new BattleGround();
@@ -37,8 +36,6 @@ public class BattleGround {
 			ArrayList<Pirate> pirates = new ArrayList<Pirate>();
 			Point pirate1 = new Point();
 			Point pirate2 = new Point();
-
-			//			ArrayList<Point> arrayPoints = new ArrayList<Point>();
 
 			float new_width;
 			float new_height;
@@ -52,16 +49,6 @@ public class BattleGround {
 				for (char c : line.toCharArray()) { //while pour perf
 					ArrayList<Integer> current = map.get(height,
 							new ArrayList<Integer>());
-					//					switch (c) {
-					//					case 'x':
-					//						current.add(c);
-					//						break;
-					//					case ' ':
-					//						break;
-					//					default:
-					//						arrayPoints.add(new Point(x,height));
-					//					}
-
 					if (c == 'x'){
 						current.add(x);
 					}else if(c == '1' || c == '2'){ // A modifier pour plus de joueurs
@@ -82,20 +69,12 @@ public class BattleGround {
 			if (bg.width == 0 || height == 0)
 				throw new IllegalStateException();
 
-			bg.isLandscape = bg.width>height;
-			if(bg.isLandscape = bg.width>height)
-				activity.getIntent().putExtra("landscape", true);
-			else
-				activity.getIntent().putExtra("landscape", false);
-
-
 			new_width = (float)activity.getIntent().getExtras().getInt("width") / (float)(bg.width);
 			new_height = (float)activity.getIntent().getExtras().getInt("height") / (float)(bg.height);
 
 			bg.texture = rescaledBitmap(activity, new_width, new_height, R.drawable.wall);
 
-
-			//Utiliser la factorie pour créer une ArrayList<Pirate>
+			//Utiliser la factory pour créer une ArrayList<Pirate>
 			pirates.add(
 					new Pirate(
 							new Point((int)(pirate1.x*new_width),
@@ -125,10 +104,9 @@ public class BattleGround {
 							)
 					);
 			bg.arrayPirates = pirates;
-			//			bg.arrayPirates = Pirate.createPirates(arrayPoints, activity, new_width, new_height);
 
 			//Translating map to background
-			for (int i = 0; i < ((bg.isLandscape)?bg.width:bg.height); i++) {
+			for (int i = 0; i < bg.width; i++) {
 				int size = map.get(i, new ArrayList<Integer>()).size();
 				for (int j = 0; j < size; j++) {
 					int y = i*bg.texture.getHeight();
@@ -139,25 +117,25 @@ public class BattleGround {
 			}
 
 			//Refactoring background
-			//			int checked = 1;
-			//			while(checked!=0){
-			//				checked = 0;
-			//				for(Rect r1 : bg.obstacles){
-			//					for(Rect r2 : bg.obstacles){
-			//						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
-			//							bg.obstacles.remove(r1);
-			//							bg.obstacles.remove(r2);
-			//							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
-			//							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
-			//							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
-			//							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
-			//							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
-			//							checked++;
-			//							break;
-			//						}
-			//					}
-			//				}
-			//			}
+//			int checked = 1;
+//			while(checked!=0){
+//				checked = 0;
+//				for(Rect r1 : bg.obstacles){
+//					for(Rect r2 : bg.obstacles){
+//						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
+//							bg.obstacles.remove(r1);
+//							bg.obstacles.remove(r2);
+//							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
+//							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
+//							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
+//							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
+//							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
+//							checked++;
+//							break;
+//						}
+//					}
+//				}
+//			}
 
 			return bg;
 		} catch (IOException ise) {
