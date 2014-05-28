@@ -1,199 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/Black">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
-    <RadioGroup
-        android:id="@+id/radio_group_difficulty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:padding="5dp" >
-
-        <TextView
-            android:id="@+id/text_difficulty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_difficulty"
-            android:textColor="@color/white" />
-
-        <RadioButton
-            android:id="@+id/easy_mode"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:checked="true"
-            android:gravity="center"
-            android:text="@string/easy_mode"
-            android:textColor="@color/white" />
-
-        <RadioButton
-            android:id="@+id/hard_mode"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="@string/hard_mode"
-            android:textColor="@color/white" />
-    </RadioGroup>
-
-    <EditText
-        android:id="@+id/name_player1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/radio_group_difficulty"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:background="@color/white"
-        android:gravity="left"
-        android:hint="@string/player1" />
-
-    <EditText
-        android:id="@+id/name_player2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name_player1"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:background="@color/white"
-        android:gravity="left"
-        android:hint="@string/player2" />
-
-    <RadioGroup
-        android:id="@+id/radio_group_sound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name_player2"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:padding="5dp" >
-
-        <TextView
-            android:id="@+id/text_sound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:hint="@string/text_sound"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textColor="@color/white" />
-
-        <RadioButton
-            android:id="@+id/button_sound_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:gravity="center"
-            android:text="@string/on"
-            android:textColor="@color/white" />
-
-        <RadioButton
-            android:id="@+id/button_sound_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/off"
-            android:textColor="@color/white" />
-    </RadioGroup>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:layout_below="@+id/radio_group_sound"
-        android:layout_above="@+id/linear_layout_button"
-        android:orientation="vertical">
-        <LinearLayout 
-            android:baselineAligned="false"
+        android:layout_height="wrap_content"
+        android:background="@color/Black" >
+
+        <RadioGroup
+            android:id="@+id/radio_group_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:orientation="horizontal"
-	        android:layout_width="fill_parent"
-	        android:layout_height="100dp" >
-            
-            <HorizontalScrollView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent" 
-                android:fillViewport="true"
-			    android:measureAllChildren="false"
-			    android:scrollbars="none"
-			    android:layout_margin="5dp"
-			     >
+            android:padding="5dp" >
 
-                                <LinearLayout
+            <TextView
+                android:id="@+id/text_difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_difficulty"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/easy_mode"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/easy_mode"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/hard_mode"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/hard_mode"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/name_player1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radio_group_difficulty"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:background="@color/white"
+            android:gravity="left"
+            android:hint="@string/player1" />
+
+        <EditText
+            android:id="@+id/name_player2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_player1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:background="@color/white"
+            android:gravity="left"
+            android:hint="@string/player2" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_sound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_player2"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/text_sound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:hint="@string/text_sound"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/button_sound_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/on"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/button_sound_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/off"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linear_layout_button"
+            android:layout_below="@+id/radio_group_sound"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <HorizontalScrollView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/player1_image" 
-                    android:orientation="horizontal"
-                    android:gravity="center"/>
+                    android:layout_height="fill_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:measureAllChildren="false"
+                    android:scrollbars="none" >
 
-            </HorizontalScrollView>
-			
-            <HorizontalScrollView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:fillViewport="true"
-			    android:measureAllChildren="false"
-			    android:scrollbars="none"
-			    android:layout_margin="5dp" >
-                
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/player2_image" 
-                    android:orientation="horizontal"/>
+                    <LinearLayout
+                        android:id="@+id/player1_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
 
-            </HorizontalScrollView>
-            
-        </LinearLayout>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:measureAllChildren="false"
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:id="@+id/player2_image"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_margin="5dp"
                 android:fillViewport="true"
-			    android:measureAllChildren="false"
-			    android:scrollbars="none"
-			    android:layout_margin="5dp" >
-                
+                android:measureAllChildren="false"
+                android:scrollbars="none" >
+
                 <LinearLayout
+                    android:id="@+id/map_image"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/map_image" 
-                    android:orientation="horizontal"/>
-
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
-    </LinearLayout>
+        </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/linear_layout_button"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/button_menu"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/button_standart_gimp"
+        <LinearLayout
+            android:id="@+id/linear_layout_button"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="@string/menu" />
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button_score_board"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:background="@drawable/button_standart_gimp"
-            android:gravity="center"
-            android:text="@string/score_board" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/button_menu"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_standart_gimp"
+                android:gravity="center"
+                android:text="@string/menu" />
 
-</RelativeLayout>
+            <Button
+                android:id="@+id/button_score_board"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_standart_gimp"
+                android:gravity="center"
+                android:text="@string/score_board" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>
