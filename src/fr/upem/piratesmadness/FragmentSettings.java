@@ -98,25 +98,6 @@ public class FragmentSettings extends Fragment {
 //				ft.commit();
 //			}
 //		});
-		Button bMenu = (Button) v.findViewById(R.id.button_menu);
-		bMenu.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-//				Log.d("PiratesMadness", "vue fragment menu");
-				ft.replace(android.R.id.content, new FragmentMain());
-				ft.addToBackStack(null);
-				ft.commit();
-			}
-		});
-		Button bScore = (Button) v.findViewById(R.id.button_score_board);
-		bScore.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ft.replace(android.R.id.content, new FragmentScoreBoard());
-				ft.addToBackStack(null);
-				ft.commit();
-			}
-		});
 	}
 
 	@Override
