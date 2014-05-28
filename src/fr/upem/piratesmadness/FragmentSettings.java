@@ -1,15 +1,12 @@
 package fr.upem.piratesmadness;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +20,6 @@ public class FragmentSettings extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_settings, null);
-		setButtonOnListener(getActivity().getIntent().getExtras(), view);
 		LayoutParams params = new LayoutParams(200, LayoutParams.WRAP_CONTENT);
 		/*Player 1 panel*/
 		LinearLayout player1 = (LinearLayout) view
@@ -86,20 +82,6 @@ public class FragmentSettings extends Fragment {
 		return iv;
 	}
 
-	private void setButtonOnListener(final Bundle savedInstanceState, View v) {
-		final FragmentManager fm = getFragmentManager();
-		final FragmentTransaction ft = fm.beginTransaction();
-//		Button bPlay = (Button) v.findViewById(R.id.button_play);
-//		bPlay.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				ft.replace(android.R.id.content, new FragmentGame());
-//				ft.addToBackStack(null);
-//				ft.commit();
-//			}
-//		});
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -119,7 +101,7 @@ public class FragmentSettings extends Fragment {
 		}
 		Log.d("PiratesMadness - SettingsActivity", "text player1 vaut : "
 				+ text);
-		data.putString("namePlayerOne", text);
+		data.putString("namePlayer1", text);
 
 		EditText edit2 = (EditText) v.findViewById(R.id.name_player2);
 		String text2 = edit2.getText().toString();
@@ -129,7 +111,7 @@ public class FragmentSettings extends Fragment {
 		}
 		Log.d("PiratesMadness - SettingsActivity", "text player2 vaut : "
 				+ text2);
-		data.putString("namePlayerTwo", text2);
+		data.putString("namePlayer2", text2);
 
 		RadioButton modeEasy = (RadioButton) v.findViewById(R.id.easy_mode);
 		String textMode = null;

@@ -1,14 +1,22 @@
 package fr.upem.piratesmadness;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	BattleGround bg;
@@ -17,7 +25,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 	public GameArea(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		getHolder().addCallback(this);
-		MainActivity main = (MainActivity) getContext();
+		final MainActivity main = (MainActivity) getContext();
 		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
 
@@ -65,6 +73,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			public void run() {
 				//Initialization of gravity and direction
 				//				impactController.update(bg);
+				long time = System.currentTimeMillis();
 				for(int i=0; i<bg.arrayPirates.size(); i++){
 					Pirate pirate = bg.arrayPirates.get(i);
 					if(pirate.gravity==null)
@@ -76,6 +85,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					SurfaceHolder holder = ga.getHolder();
 					impactController.update(bg);
 					ia.update(bg);
+					long current_time = System.currentTimeMillis()-time;
 					try{
 						Canvas canvas = holder.lockCanvas();
 						canvas.drawRGB(255, 255, 255);
@@ -85,12 +95,70 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					}catch(NullPointerException npe){
 						//Do Nothing
 					}
+					boolean dead = false;
+					for(int i = 0; i<bg.arrayPirates.size();i++)
+						dead |= bg.arrayPirates.get(i).life<=0;
+					if(current_time>=100000 || dead) 
+						gameOver(bg.arrayPirates, Math.min(current_time, 100000));
 				}
 			}
 		});
 		workerThread.setDaemon(true);
 	}
 
+	private void gameOver(ArrayList<Pirate> pirates, long time) {
+		final MainActivity main = (MainActivity) getContext();
+		int winnerId = 0;
+		int looserId = 0;
+		for(int i = 1; i<pirates.size();i++){
+			if(pirates.get(winnerId).life<pirates.get(i).life) winnerId = i;
+			else if(pirates.get(looserId).life>pirates.get(i).life) looserId = i;
+		}
+		Pirate winner = pirates.get(winnerId);
+		Pirate looser = pirates.get(looserId);
+		final LinearLayout ll = new LinearLayout(main);
+		ll.setGravity(Gravity.CENTER);
+		TextView tv = new TextView(main);
+		tv.setText("Winner : " + winner.name);
+		tv.setWidth(100);
+		ll.addView(tv);
+		tv = new TextView(main);
+		tv.setText("Looser : " + looser.name);
+		tv.setWidth(100);
+		ll.addView(tv);
+		tv = new TextView(main);
+		tv.setText("Time : " + time/1000 + "s");
+		tv.setWidth(100);
+		ll.addView(tv);
+		tv = new TextView(main);
+		long score = winner.life*10000 + 100000 - time;
+		tv.setText("Score : " + score/1000);
+		tv.setWidth(100);
+		ll.addView(tv);
+		StringBuilder scores = new StringBuilder();
+		try{
+			FileInputStream fis = main.openFileInput("score");
+			Scanner s = new Scanner(fis);
+			while(s.hasNextLine())
+				scores.append(s.nextLine()+"\n");
+			fis.close();
+		}catch(IOException e){}
+		scores.append(winner.name + " " + looser.name + " " + time/1000 + " " + score/1000);
+		try{
+			FileOutputStream fos = main.openFileOutput("score", 2);
+			fos.write(scores.toString().getBytes());
+			fos.close();
+		}catch(IOException e){}
+		main.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				main.setContentView(ll);
+			}
+		});
+		workerThread.interrupt();
+	}
+	
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		workerThread.start();
