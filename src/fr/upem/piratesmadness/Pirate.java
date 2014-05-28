@@ -21,7 +21,9 @@ public class Pirate {
 	Rect origin;
 	int actualy;
 	Activity ga;
-
+	//need this variable volatile ?
+	volatile int twiceJump;
+	volatile boolean twiceSpeedAcceleration;
 
 
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face, int number) {
@@ -30,29 +32,20 @@ public class Pirate {
 		this.texture = face;
 		this.ga = activity;
 		coordinate = initialCoordinate;
-		//		final int middleX;
-		//		final int middleY;
-		//		if(width<height){
-		//			middleX = width;
-		//			middleY = height/2;
-		//		}else{
-		//			middleX = width/2;
-		//			middleY = height;
-		//		}
-
 		if(number==1){
 			this.padBuffer = new Rect(0, 0, (width/2), height);
 		}else{
 			this.padBuffer = new Rect((width/2), 0, width, height);
 		}
-
 		life = 3;
 		speed=3;
 		speedAcceleration=1;
 		noGravity=true;
 		name=String.valueOf(number);
 		actualy=-1;
-//		origin=null;
+		//At the beginning you can't
+		twiceJump=10;
+		twiceSpeedAcceleration=false;
 	}
 
 	public boolean isActually(Rect rec){

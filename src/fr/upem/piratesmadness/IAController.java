@@ -54,6 +54,14 @@ public class IAController {
 	
 	public void startingToJump(Pirate p){
 		p.speedAcceleration=(float) -1.6;
+		p.twiceJump=0;
+		if(p.twiceSpeedAcceleration){
+			Log.d("PiratesMadness","TwiceJump ok");
+			p.speedAcceleration+=(float) -1.6;
+			//Pirate can't use double jump twice
+			p.twiceJump=10;
+		}
+		p.twiceSpeedAcceleration=false;
 		p.noGravity=true;
 	}
 	
@@ -63,9 +71,6 @@ public class IAController {
 			Log.d("PiratesMadness", "Pirate : "+p.name+"; coordinate, width :"+p.coordinate.x+"; height : "+p.coordinate.y+"; buffer : "+p.padBuffer.flattenToString());
 			Log.d("PiratesMadness","speed : "+p.speed+"; speed accélération : "+p.speedAcceleration+"; Direction : "+p.direction+"; gravity : "+p.gravity);
 		}
-//		for(Rect r : bg.obstacles){
-//			Log.d("PiratesMadness","obstacle : "+r.flattenToString());
-//		}
 	}
 	
 
@@ -78,26 +83,8 @@ public class IAController {
 		
 		for(int i=0; i<numberOfPirates; i++){
 			//If there is a jump : check direction and gravity; due to two variables changed
-//				checkWall(battleGround.obstacles, battleGround.arrayPirates.get(i), battleGround.arrayPirates.get(i).direction);
 			move(arrayPirate.get(i));
 		}
-		
-		
-		//Check if pirates are against a wall
-
-		//Check if pirates hit together
-
-		//Check if speedAcceleration is finished or not And so the gravity
 	}
-
-		
-//	//If pirate is jumping : direction =  gravity
-//	public void changeDirection(Pirate p, Direction newGravity){
-//		if(!p.direction.isOpposite(newGravity)){
-//			p.direction = p.gravity;
-//		}
-//		p.gravity = newGravity;
-//	}
-	
 	
 }

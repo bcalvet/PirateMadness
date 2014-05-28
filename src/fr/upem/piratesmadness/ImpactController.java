@@ -1,9 +1,14 @@
 package fr.upem.piratesmadness;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.text.format.Time;
 import android.util.Log;
+import android.util.TimeUtils;
 
 public class ImpactController {
 
@@ -33,7 +38,7 @@ public class ImpactController {
 
 	private void fall(Pirate p1) {
 		Log.d("PiratesMadness","fall");
-		// With set speedAcceleration 1.1, speedAcceleration increase to 1.6 by step 1.1
+		// With set speedAcceleration 1.1, speedAcceleration increase to 1.6 by step 0.1
 		p1.speedAcceleration=(float)1.1;
 		p1.noGravity=true;
 	}
@@ -53,21 +58,21 @@ public class ImpactController {
 	}
 
 	private boolean changeGravity(Pirate p1, Rect rec){
-//		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
+		Log.d("PiratesMadness","Ancienne gravity : "+p1.gravity+ " direction : "+p1.direction);
 		Direction tmp = checkGravity(p1, rec);
-//		Log.d("PiratesMadness", "checkGravity : "+tmp);
+		Log.d("PiratesMadness", "checkGravity : "+tmp);
 		boolean result = changeDirection(p1, tmp);
-//		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
+		Log.d("PiratesMadness","New gravity : "+p1.gravity+ " direction : "+p1.direction);
 		return result;
 	}
 
 	private Direction checkGravity(Pirate p, Rect r){
-//		Log.d("PiratesMadness","checkGravity");
+		//		Log.d("PiratesMadness","checkGravity");
 		Rect r2 = p.getPirateBuffer();
-//		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
-//		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
-//		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
-//		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
+		Log.d("Pirates", "r2.bottom = "+r2.bottom+ "	r.top = "+ r.top);
+		Log.d("Pirates", "r2.right = "+r2.right + "	r.left = "+r.left);
+		Log.d("Pirates", "r2.left = "+r2.left+ "	r.right = " + r.right);
+		Log.d("Pirates", "r2.top = "+r2.top + "	r.bottom = "+r.bottom);
 		if(r2.bottom>r.top && r2.right>=r.left && r2.top<r.bottom && r2.left<r.left)
 			return Direction.EAST;
 		if(r2.bottom>=r.top && r2.right>r.left && r2.left<r.right && r2.top<r.top)
@@ -79,32 +84,35 @@ public class ImpactController {
 
 
 	private boolean hitWall(Rect obstacle, Pirate p1){
+		Rect bufferOfPirate = p1.getPirateBuffer();
 		//		Log.d("PiratesMadness","hitWall");
-		if(Rect.intersects(obstacle, p1.getPirateBuffer())){
+		if(Rect.intersects(obstacle, bufferOfPirate)){
+			//When intersects first time after jump set twiceJump true, because the player can rejump. But he as only one chance
+			p1.twiceJump++;
 			if(!p1.isActually(obstacle)){
 				//hit a wall when jumping
-//				Log.d("PiratesMadness","noGravity : "+p1.noGravity);
 				if(p1.noGravity && changeGravity(p1,obstacle)){
 					p1.noGravity = false;
 					p1.setActually(obstacle);
 					//Correction of the pirateBuffer position.
+					Log.d("PiratesMadness","pirate corrections - g : "+p1.gravity+", d : "+p1.direction);
 					switch (p1.gravity) {
 					case NORTH:
-						p1.coordinate.y=obstacle.bottom+(p1.getPirateBuffer().height()/2)-1;
+						p1.coordinate.y=obstacle.bottom+(bufferOfPirate.height()/2)-1;
 						break;
 					case SOUTH:
-						p1.coordinate.y=obstacle.top-(p1.getPirateBuffer().height()/2)+1;
+						p1.coordinate.y=obstacle.top-(bufferOfPirate.height()/2)+1;
 						break;
 					case EAST:
-						p1.coordinate.x=obstacle.left-(p1.getPirateBuffer().width()/2)+1;
+						p1.coordinate.x=obstacle.left-(bufferOfPirate.width()/2)+1;
 						break;
 					case WEST:
-						p1.coordinate.x=obstacle.right+(p1.getPirateBuffer().width()/2)-1;
+						p1.coordinate.x=obstacle.right+(bufferOfPirate.width()/2)-1;
 						break;
 					}
 					//Set speedAcceleration 1
 					p1.speedAcceleration=1;
-					
+
 				}
 				//que le mur perpendiculaire à la gravité du pirate
 				else{
@@ -118,10 +126,11 @@ public class ImpactController {
 			return true;
 		}
 		//If the pirate intersects anything but its variable noGravity is setting to true, in that case
-		//we don't want that he falls, but just moves.
+		//we don't want that he falls, but just moves. And anticipated the next movement
 		if(p1.noGravity){
 			return true;
 		}
+
 		return false;
 	}
 
@@ -161,13 +170,30 @@ public class ImpactController {
 	}
 
 	public boolean changeDirection(Pirate p, Direction newGravity){
-		//!p.direction.isOpposite(newGravity) && 
-		//		if(p.gravity == newGravity && p.speedAcceleration<0){
-		//			//TODO : nothing; it's because the pirate intersects the block where he is already.
-		//			return false;
-		//		}
-		if(newGravity != p.gravity && !p.gravity.isOpposite(newGravity)){
-			p.direction = p.gravity;
+		if(newGravity!=p.gravity && !p.gravity.isOpposite(newGravity)){
+			if(p.speedAcceleration<0){
+				p.direction = p.gravity.oppositeDirection(p);
+			}else{
+				p.direction = p.gravity;
+			}
+		}
+		int rotation = 0;
+		switch(newGravity.ordinal()-p.gravity.ordinal()){
+		case 2 : case -2 :
+			rotation = 180;
+			break;
+		case -1 : case 3 :
+			rotation = 3*90;
+			break;
+		case 1 : case -3 :
+			rotation = 90;
+			break;
+		}
+		if(rotation!=0){
+			Matrix m = new Matrix();
+			m.postRotate(rotation);
+			p.texture = Bitmap.createBitmap(p.texture, 0, 0,
+					p.texture.getWidth(), p.texture.getHeight(), m, false);
 		}
 		p.gravity = newGravity;
 		return true;

@@ -19,6 +19,12 @@ public enum Direction {
 				p.direction=EAST;
 			}
 		}
+
+		@Override
+		public Direction oppositeDirection(Pirate p) {
+			// TODO Auto-generated method stub
+			return Direction.SOUTH;
+		}
 	}
 	,EAST {
 		@Override
@@ -35,6 +41,12 @@ public enum Direction {
 			}else{
 				p.direction=SOUTH;
 			}
+		}
+
+		@Override
+		public Direction oppositeDirection(Pirate p) {
+			// TODO Auto-generated method stub
+			return Direction.WEST;
 		}
 	}
 	,WEST {
@@ -53,6 +65,12 @@ public enum Direction {
 				p.direction=SOUTH;
 			}	
 		}
+
+		@Override
+		public Direction oppositeDirection(Pirate p) {
+			// TODO Auto-generated method stub
+			return Direction.EAST;
+		}
 	}
 	,SOUTH {
 		@Override
@@ -70,9 +88,16 @@ public enum Direction {
 				p.direction=EAST;
 			}
 		}
+
+		@Override
+		public Direction oppositeDirection(Pirate p) {
+			// TODO Auto-generated method stub
+			return Direction.NORTH;
+		}
 	};
 	
 
 	abstract public boolean isOpposite(Direction d);
 	abstract public void randomDirection(Pirate p);
+	abstract public Direction oppositeDirection(Pirate p);
 }

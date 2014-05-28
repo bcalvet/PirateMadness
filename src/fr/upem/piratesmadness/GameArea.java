@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -27,12 +28,12 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		final IAController ia = new IAController();
 		final ImpactController impactController = new ImpactController(); 
 
-		OnTouchListener otl = new OnTouchListener() {
+		final OnTouchListener otl = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-//					Log.d("PiratesMadness","évènement dans le onTouch");
+					//					Log.d("PiratesMadness","évènement dans le onTouch");
 					int id = -1;
 					if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
@@ -42,7 +43,13 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 							id = 1;
 					}
 					if(id!=-1){
-						ia.startingToJump(bg.arrayPirates.get(id));
+						//This condition avoids pirate to jump in fly
+						if(!bg.arrayPirates.get(id).noGravity){
+							if(bg.arrayPirates.get(id).twiceJump<10){
+								bg.arrayPirates.get(id).twiceSpeedAcceleration=true;
+							}
+							ia.startingToJump(bg.arrayPirates.get(id));
+						}
 					}
 					return true;
 				default:
@@ -66,7 +73,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					if(pirate.gravity==null)
 						pirate.gravity=Direction.SOUTH;
 					pirate.gravity.randomDirection(pirate);
-//					Log.d("PiratesMadness",pirate.toString());
+					//					Log.d("PiratesMadness",pirate.toString());
 				}
 				//Infinity cycle to move and update information
 				while(!Thread.currentThread().isInterrupted()){
