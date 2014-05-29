@@ -200,7 +200,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					(float)pirate.coordinate.x-(pirate.texture.getWidth()/2),
 					(float)pirate.coordinate.y-(pirate.texture.getHeight()/2), null);
 			canvas.drawRect(pirate.getPirateBuffer(), p);
-			if(pirate.name.contains("1")){
+			if(pirate.id==1){
 				p.setColor(getContext().getResources().getColor(R.color.red));
 			}else{
 				p.setColor(getContext().getResources().getColor(R.color.blue));

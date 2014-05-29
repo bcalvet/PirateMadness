@@ -24,7 +24,7 @@ public class Bonus {
 	
 	static boolean generate(){
 		Random random = new Random();
-		if(random.nextInt((int)System.currentTimeMillis())%100==0){
+		if(random.nextInt((int)System.currentTimeMillis())%500==0){
 			return true;
 		}
 		return false;

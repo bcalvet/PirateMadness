@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 
@@ -47,9 +49,39 @@ public class FragmentSettings extends Fragment {
 		map.setBackgroundColor(getResources().getColor(R.color.grey));
 		map.addView(getPreconfiguredMapImageView(R.drawable.map1, params, 1));
 		map.addView(getPreconfiguredMapImageView(R.drawable.map3, params, 3));
+		RadioButton rb = (RadioButton) view.findViewById(R.id.easy_mode);
+		rb.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getActivity().getIntent().putExtra("mode", 1);
+			}
+		});
+		rb = (RadioButton) view.findViewById(R.id.hard_mode);
+		rb.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getActivity().getIntent().putExtra("mode", 2);
+			}
+		});
+		EditText et = (EditText)view.findViewById(R.id.name_player1);
+		et.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus)
+					getActivity().getIntent().putExtra("player" + 1, 1);
+			}
+		});
+		et = (EditText)view.findViewById(R.id.name_player2);
+		et.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus)
+					getActivity().getIntent().putExtra("player" + 2, 2);
+			}
+		});
 		return view;
 	}
-
+	
 	private ImageView getPreconfiguredMapImageView(final int drawableId,
 			LayoutParams params, final int mapId) {
 		ImageView iv = new ImageView(getActivity());

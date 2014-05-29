@@ -19,12 +19,14 @@ public class Pirate {
 	Rect origin;
 	int currently;
 	Activity ga;
+	int id;
 	//need this variable volatile ?
 	volatile int twiceJump;
 	volatile boolean twiceSpeedAcceleration;
 
 
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face, int number) {
+		this.id = id;
 		int width = activity.getIntent().getExtras().getInt("width");
 		int height = activity.getIntent().getExtras().getInt("height");
 		this.texture = face;
@@ -39,7 +41,7 @@ public class Pirate {
 		speed=3;
 		speedAcceleration=1;
 		noGravity=true;
-		name=String.valueOf(number);
+		name=activity.getIntent().getExtras().getString("player"+id);
 		currently=-1;
 		//At the beginning you can't
 		twiceJump=10;
