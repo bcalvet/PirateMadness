@@ -16,7 +16,6 @@ public class Pirate {
 	boolean noGravity;
 	Direction direction;
 	final Rect padBuffer;
-	Rect pirateBuffer = new Rect(0,0,0,0);
 	Rect origin;
 	int currently;
 	Activity ga;
@@ -48,55 +47,17 @@ public class Pirate {
 	}
 
 	public boolean isCurrently(Rect rec){
-//		int plop = -1;
-//		boolean result=false;
-//		float val = Math.abs(speedAcceleration);
 		switch (gravity) {
 		case NORTH:
-//			plop = rec.bottom;
-//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.bottom, actualy+(speed+val));
-//			break;
 			return rec.bottom==currently;
 		case SOUTH:
-//			plop = rec.top;
-//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.top, actualy+(speed+val));
-//			break;
 			return rec.top == currently;
 		case EAST:
-//			plop = rec.left;
-//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.left, actualy+(speed+val));
-//			break;
 			return rec.left==currently;
 		case WEST:
-//			plop = rec.right;
-//			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.right, actualy+(speed+val));
-//			break;
 			return  rec.right==currently;
 		}
-//		Log.d("Pirate", "gravity : " + gravity + " actually " +actualy + " compared to " + plop+"; result : "+result);
-//		return result;
-//		return rec==origin;
 		return false;
-	}
-	
-	public void setCurrently(Rect rec){
-//		Log.d("PiratesMadness","old actualy : "+actualy+"; gravity : "+gravity);
-		switch (gravity) {
-		case NORTH:
-			currently = rec.bottom;
-			break;
-		case SOUTH:
-			currently = rec.top;
-			break;
-		case EAST:
-			currently = rec.left;
-			break;
-		case WEST:
-			currently = rec.right;
-			break;
-		}
-//		Log.d("PiratesMadness","rect : "+rec.flattenToString()+"; new actually : "+actualy);
-//		this.origin = rec;
 	}
 
 	public Rect getPiratePadBuffer(){
@@ -107,7 +68,8 @@ public class Pirate {
 	}
 
 	public Rect getPirateBuffer() {
-		pirateBuffer.left = coordinate.x-(texture.getWidth()/3);
+		Rect pirateBuffer = new Rect(0,0,0,0);
+		pirateBuffer.left = coordinate.x - (texture.getWidth()/3);
 		pirateBuffer.top= coordinate.y - (texture.getHeight()/3);
 		pirateBuffer.right = coordinate.x + (texture.getWidth()/3);
 		pirateBuffer.bottom = coordinate.y + (texture.getHeight()/3);

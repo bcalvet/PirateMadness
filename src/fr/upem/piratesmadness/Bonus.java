@@ -7,23 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Bonus {
 
 	Point coordinate;
 	Direction gravity;
-	Rect buffer;
 	Bitmap texture;
 	final int type;
 	boolean visibility;
 	boolean noGravity;
 	
 	public Bonus(int t) {
-		// TODO Auto-generated constructor stub
 		type = t;
 		coordinate = new Point(0,0);
-		buffer = new Rect();
 	}
 	
 	static boolean generate(){
@@ -34,7 +30,7 @@ public class Bonus {
 		return false;
 	}
 	
-	static Bonus generator(GameArea ga){
+	static Bonus bonusFactory(GameArea ga){
 		//Storage in hardware of the bonus list possibilities
 		int possibilities = 3;
 		MainActivity activity = (MainActivity)ga.getContext();
@@ -89,42 +85,11 @@ public class Bonus {
 	}
 	
 	public Rect getBuffer(){
+		Rect buffer = new Rect();
 		buffer.left = coordinate.x - (texture.getWidth()/2);
 		buffer.top= coordinate.y - (texture.getHeight()/2);
 		buffer.right = coordinate.x + (texture.getWidth()/2);
 		buffer.bottom = coordinate.y + (texture.getHeight()/2);
 		return buffer;
 	}
-	
-	void setEffect(final Pirate p){
-		visibility=false;
-		switch(type){
-		case 0:
-			p.life++;
-			p.ga.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					Toast.makeText(p.ga, "Pirate "+p.name+" win a life", Toast.LENGTH_SHORT).show();
-				}
-			});
-			return;
-		case 1:
-			p.direction = p.direction.oppositeDirection();
-			return;
-		case 2:
-			p.speed+=p.speed;
-			return;
-		}
-	}
-	
-	boolean consumeEffect(Pirate p){
-		if(Rect.intersects(p.getPirateBuffer(), buffer)){
-			setEffect(p);
-			return true;
-		}
-		return false;
-	}
-
 }

@@ -88,7 +88,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					impactController.update(bg);
 					ia.update(bg);
 					if(Bonus.generate()){
-						ga.bg.arrayBonus.add(Bonus.generator(ga));
+						ga.bg.arrayBonus.add(Bonus.bonusFactory(ga));
 					}
 					long current_time = System.currentTimeMillis()-time;
 					try{

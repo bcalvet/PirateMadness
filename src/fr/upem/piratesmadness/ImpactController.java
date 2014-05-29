@@ -2,8 +2,6 @@ package fr.upem.piratesmadness;
 
 import java.util.ArrayList;
 
-import javax.xml.datatype.Duration;
-
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -27,11 +25,11 @@ public class ImpactController {
 			p2NotFalling|=hitWall(obstacle, p2);
 			for(int j=0;j<bonus.size(); j++){
 				bonusIntersection(obstacle, bonus.get(j));
-				if(bonus.get(j).consumeEffect(p1)){
+				if(consumeEffect(p1, bonus.get(j))){
 					bonus.remove(j);
 				}
 				if(j<bonus.size())
-					if(bonus.get(j).consumeEffect(p2)){
+					if(consumeEffect(p2, bonus.get(j))){
 						bonus.remove(j);
 					}
 			}
@@ -45,6 +43,32 @@ public class ImpactController {
 		if(!p2NotFalling)
 			fall(p2);
 		hit(p1,p2);
+	}
+
+	boolean consumeEffect(final Pirate p, Bonus b){
+		if(Rect.intersects(p.getPirateBuffer(), b.getBuffer())){
+			b.visibility=false;
+			switch(b.type){
+			case 0:
+				p.life++;
+				p.ga.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						Toast.makeText(p.ga, "Pirate "+p.name+" win a life", Toast.LENGTH_SHORT).show();
+					}
+				});
+				break;
+			case 1:
+				p.direction = p.direction.oppositeDirection();
+				break;
+			case 2:
+				p.speed+=p.speed;
+				break;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private void fall(Pirate p1) {
@@ -153,7 +177,20 @@ public class ImpactController {
 				//hit a wall when jumping
 				if(p1.noGravity && changeGravity(p1,obstacle)){
 					p1.noGravity = false;
-					p1.setCurrently(obstacle);
+					switch (p1.gravity) {
+					case NORTH:
+						p1.currently = obstacle.bottom;
+						break;
+					case SOUTH:
+						p1.currently = obstacle.top;
+						break;
+					case EAST:
+						p1.currently = obstacle.left;
+						break;
+					case WEST:
+						p1.currently = obstacle.right;
+						break;
+					}
 					//Correction of the pirateBuffer position.
 					//					Log.d("PiratesMadness","pirate corrections - g : "+p1.gravity+", d : "+p1.direction);
 					switch (p1.gravity) {
@@ -217,7 +254,6 @@ public class ImpactController {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						Toast.makeText(p1.ga, "Pirate "+p2.name+" loose a life", Toast.LENGTH_SHORT).show();
 					}
 				});
@@ -228,7 +264,6 @@ public class ImpactController {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						Toast.makeText(p1.ga, "Pirate "+p1.name+" loose a life", Toast.LENGTH_SHORT).show();
 					}
 				});
