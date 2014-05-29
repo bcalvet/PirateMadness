@@ -119,25 +119,25 @@ public class BattleGround {
 			}
 
 			//Refactoring background
-//			int checked = 1;
-//			while(checked!=0){
-//				checked = 0;
-//				for(Rect r1 : bg.obstacles){
-//					for(Rect r2 : bg.obstacles){
-//						if(r1!=r2 && r1.intersect(r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
-//							bg.obstacles.remove(r1);
-//							bg.obstacles.remove(r2);
-//							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
-//							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
-//							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
-//							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
-//							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
-//							checked++;
-//							break;
-//						}
-//					}
-//				}
-//			}
+			int checked = 1;
+			while(checked!=0){
+				checked = 0;
+				for(Rect r1 : bg.obstacles){
+					for(Rect r2 : bg.obstacles){
+						if(r1!=r2 && Rect.intersects(r1, r2) && (r1.centerX()==r2.centerX()||r1.centerY()==r2.centerY())){
+							bg.obstacles.remove(r1);
+							bg.obstacles.remove(r2);
+							int ymin = Math.min(r1.centerY()-r1.height()/2, r2.centerY()-r1.height()/2);
+							int ymax = Math.max(r1.centerY()+r1.height()/2, r2.centerY()+r1.height()/2);
+							int xmin = Math.min(r1.centerX()-r1.width()/2, r2.centerX()-r1.width()/2);
+							int xmax = Math.min(r1.centerX()+r1.width()/2, r2.centerX()+r1.width()/2);
+							bg.obstacles.add(new Rect(ymin,xmin,ymax,xmax));
+							checked++;
+							break;
+						}
+					}
+				}
+			}
 
 			return bg;
 		} catch (IOException ise) {

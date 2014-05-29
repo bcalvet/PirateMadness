@@ -11,7 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -31,9 +30,9 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		final GameArea ga = this;
 		bg = BattleGround.initGame(main);
 
-		//Initialization of the IAController too
+		// Initialization of the IAController too
 		final IAController ia = new IAController();
-		final ImpactController impactController = new ImpactController(); 
+		final ImpactController impactController = new ImpactController();
 
 		final OnTouchListener otl = new OnTouchListener() {
 			@Override
@@ -41,72 +40,84 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					int id = -1;
-					if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
-						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
+					if (bg.arrayPirates.get(0).getPiratePadBuffer()
+							.contains((int) event.getX(), (int) event.getY())) {
+						if (!bg.arrayPirates
+								.get(1)
+								.getPiratePadBuffer()
+								.contains((int) event.getX(),
+										(int) event.getY())) {
 							id = 0;
 						}
-					} else if(bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
-						if(!bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
+					} else if (bg.arrayPirates.get(1).getPiratePadBuffer()
+							.contains((int) event.getX(), (int) event.getY())) {
+						if (!bg.arrayPirates
+								.get(0)
+								.getPiratePadBuffer()
+								.contains((int) event.getX(),
+										(int) event.getY())) {
 							id = 1;
 						}
 					}
-					if(id!=-1){
-						//This condition avoids pirate to jump in fly
-						if(!bg.arrayPirates.get(id).noGravity){
-							if(bg.arrayPirates.get(id).twiceJump<10){
-								bg.arrayPirates.get(id).twiceSpeedAcceleration=true;
+					if (id != -1) {
+						// This condition avoids pirate to jump in fly
+						if (!bg.arrayPirates.get(id).noGravity) {
+							if (bg.arrayPirates.get(id).twiceJump < 10) {
+								bg.arrayPirates.get(id).twiceSpeedAcceleration = true;
 							}
 							ia.startingToJump(bg.arrayPirates.get(id));
 						}
 					}
 					return true;
 				default:
-					//Event is consumed to do nothing
+					// Event is consumed to do nothing
 					return true;
 				}
 			}
 		};
 		this.setOnTouchListener(otl);
 
-		//Initialization of the pirates must be done before this Thread due to the destruction of this thread
+		// Initialization of the pirates must be done before this Thread due to
+		// the destruction of this thread
 
 		workerThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				//Initialization of gravity and direction
-				//				impactController.update(bg);
+				// Initialization of gravity and direction
+				// impactController.update(bg);
 				long time = System.currentTimeMillis();
-				for(int i=0; i<bg.arrayPirates.size(); i++){
+				for (int i = 0; i < bg.arrayPirates.size(); i++) {
 					Pirate pirate = bg.arrayPirates.get(i);
-					if(pirate.gravity==null)
-						pirate.gravity=Direction.SOUTH;
+					if (pirate.gravity == null)
+						pirate.gravity = Direction.SOUTH;
 					pirate.gravity.randomDirection(pirate);
 				}
-				//Infinity cycle to move and update information
-				while(!Thread.currentThread().isInterrupted()){
+				// Infinity cycle to move and update information
+				while (!Thread.currentThread().isInterrupted()) {
 					SurfaceHolder holder = ga.getHolder();
 					impactController.update(bg);
 					ia.update(bg);
-					if(Bonus.generate()){
+					if (Bonus.generate()) {
 						ga.bg.arrayBonus.add(Bonus.bonusFactory(ga));
 					}
-					long current_time = System.currentTimeMillis()-time;
-					try{
+					long current_time = System.currentTimeMillis() - time;
+					try {
 						Canvas canvas = holder.lockCanvas();
 						canvas.drawRGB(255, 255, 255);
 						drawMap(canvas);
 						drawPirate(canvas);
 						drawBonus(canvas);
 						holder.unlockCanvasAndPost(canvas);
-					}catch(NullPointerException npe){
-						//Do Nothing
+					} catch (NullPointerException npe) {
+						// Do Nothing
 					}
 					boolean dead = false;
-					for(int i = 0; i<bg.arrayPirates.size();i++)
-						dead |= bg.arrayPirates.get(i).life<=0;
-					if(current_time>=100000 || dead) 
-						gameOver(bg.arrayPirates, Math.min(current_time, 100000));
+					for (int i = 0; i < bg.arrayPirates.size(); i++)
+						dead |= bg.arrayPirates.get(i).life <= 0;
+					if (current_time >= 100000 || dead)
+						gameOver(bg.arrayPirates,
+								Math.min(current_time, 100000));
 				}
 			}
 		});
@@ -117,9 +128,11 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		final MainActivity main = (MainActivity) getContext();
 		int winnerId = 0;
 		int looserId = 0;
-		for(int i = 1; i<pirates.size();i++){
-			if(pirates.get(winnerId).life<pirates.get(i).life) winnerId = i;
-			else if(pirates.get(looserId).life>pirates.get(i).life) looserId = i;
+		for (int i = 1; i < pirates.size(); i++) {
+			if (pirates.get(winnerId).life < pirates.get(i).life)
+				winnerId = i;
+			else if (pirates.get(looserId).life > pirates.get(i).life)
+				looserId = i;
 		}
 		Pirate winner = pirates.get(winnerId);
 		Pirate looser = pirates.get(looserId);
@@ -134,28 +147,31 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		tv.setWidth(100);
 		ll.addView(tv);
 		tv = new TextView(main);
-		tv.setText("Time : " + time/1000 + "s");
+		tv.setText("Time : " + time / 1000 + "s");
 		tv.setWidth(100);
 		ll.addView(tv);
 		tv = new TextView(main);
-		long score = winner.life*10000 + 100000 - time;
-		tv.setText("Score : " + score/1000);
+		long score = winner.life * 10000 + 100000 - time;
+		tv.setText("Score : " + score / 1000);
 		tv.setWidth(100);
 		ll.addView(tv);
 		StringBuilder scores = new StringBuilder();
-		try{
+		try {
 			FileInputStream fis = main.openFileInput("score");
 			Scanner s = new Scanner(fis);
-			while(s.hasNextLine())
-				scores.append(s.nextLine()+"\n");
+			while (s.hasNextLine())
+				scores.append(s.nextLine() + "\n");
 			fis.close();
-		}catch(IOException e){}
-		scores.append(winner.name + " " + looser.name + " " + time/1000 + " " + score/1000);
-		try{
+		} catch (IOException e) {
+		}
+		scores.append(winner.name + " " + looser.name + " " + time / 1000 + " "
+				+ score / 1000);
+		try {
 			FileOutputStream fos = main.openFileOutput("score", 2);
 			fos.write(scores.toString().getBytes());
 			fos.close();
-		}catch(IOException e){}
+		} catch (IOException e) {
+		}
 		main.runOnUiThread(new Runnable() {
 
 			@Override
@@ -182,43 +198,50 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		workerThread.interrupt();
 	}
 
-	private void drawMap(Canvas canvas){
-		for(int i = 0; i<bg.obstacles.size();i++){
+	private void drawMap(Canvas canvas) {
+		for (int i = 0; i < bg.obstacles.size(); i++) {
 			Paint p = new Paint();
 			p.setColor(getContext().getResources().getColor(R.color.Black));
 			p.setStrokeWidth(2);
 			p.setStyle(Style.STROKE);
-			//			canvas.drawRect(bg.obstacles.get(i), p);
-			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
+			canvas.drawRect(bg.obstacles.get(i), p);
+			// canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
 		}
 	}
-	private void drawPirate(Canvas canvas){
-		for(int i = 0; i<2; i++){
+
+	private void drawPirate(Canvas canvas) {
+		for (int i = 0; i < 2; i++) {
 			Pirate pirate = bg.arrayPirates.get(i);
 			Paint p = new Paint();
 			p.setColor(getContext().getResources().getColor(R.color.green));
-			canvas.drawBitmap(pirate.texture,
-					(float)pirate.coordinate.x-(pirate.texture.getWidth()/2),
-					(float)pirate.coordinate.y-(pirate.texture.getHeight()/2), null);
+			canvas.drawBitmap(pirate.texture, (float) pirate.coordinate.x
+					- (pirate.texture.getWidth() / 2),
+					(float) pirate.coordinate.y
+							- (pirate.texture.getHeight() / 2), null);
 			canvas.drawRect(pirate.getPirateBuffer(), p);
-			if(pirate.id==1){
+			if (pirate.id == 1) {
 				p.setColor(getContext().getResources().getColor(R.color.red));
-			}else{
+			} else {
 				p.setColor(getContext().getResources().getColor(R.color.blue));
 			}
 			canvas.drawRect(pirate.getPiratePadBuffer(), p);
 		}
 	}
-	private void drawBonus(Canvas canvas){
+
+	private void drawBonus(Canvas canvas) {
 		Paint p = new Paint();
 		p.setColor(getContext().getResources().getColor(R.color.grey));
-		for(int i=0; i<bg.arrayBonus.size();i++){
-			if(bg.arrayBonus.get(i).visibility){
-				canvas.drawBitmap(bg.arrayBonus.get(i).texture,
-				(float)bg.arrayBonus.get(i).coordinate.x-(bg.arrayBonus.get(i).texture.getWidth()/2),
-				(float)bg.arrayBonus.get(i).coordinate.y-(bg.arrayBonus.get(i).texture.getHeight()/2), null);
+		for (int i = 0; i < bg.arrayBonus.size(); i++) {
+			if (bg.arrayBonus.get(i).visibility) {
+				canvas.drawBitmap(
+						bg.arrayBonus.get(i).texture,
+						(float) bg.arrayBonus.get(i).coordinate.x
+								- (bg.arrayBonus.get(i).texture.getWidth() / 2),
+						(float) bg.arrayBonus.get(i).coordinate.y
+								- (bg.arrayBonus.get(i).texture.getHeight() / 2),
+						null);
 				canvas.drawRect(bg.arrayBonus.get(i).getBuffer(), p);
-				
+
 			}
 		}
 	}

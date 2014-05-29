@@ -1,14 +1,19 @@
 package fr.upem.piratesmadness;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Bitmap.CompressFormat;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
-public class Bonus {
+public class Bonus implements Parcelable{
 
 	Point coordinate;
 	Direction gravity;
@@ -16,6 +21,48 @@ public class Bonus {
 	final int type;
 	boolean visibility;
 	boolean noGravity;
+	
+	public Bonus(Parcel in){
+		gravity = Direction.valueOf(in.readString());
+		int[] idata = new int[3];
+		in.readIntArray(idata);
+		coordinate = new Point(idata[0], idata[1]);
+		type = idata[2];
+		boolean[] bdata = new boolean[2];
+		in.readBooleanArray(bdata);
+		noGravity = bdata[0];
+		visibility = bdata[1];
+		byte[] array = in.createByteArray();
+		this.texture = BitmapFactory.decodeByteArray(array, 0, array.length);
+	}
+	
+    public static final Parcelable.Creator<Bonus> CREATOR = new Parcelable.Creator<Bonus>() {
+        public Bonus createFromParcel(Parcel in) {
+            return new Bonus(in); 
+        }
+
+        public Bonus[] newArray(int size) {
+            return new Bonus[size];
+        }
+    };
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(gravity.name());
+		dest.writeIntArray(new int[]{
+				coordinate.x, coordinate.y, type
+		});
+		dest.writeBooleanArray(new boolean[]{
+				noGravity, visibility
+		});
+		ByteArrayOutputStream blob = new ByteArrayOutputStream();
+		texture.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, blob);
+		dest.writeByteArray(blob.toByteArray());
+	}
 	
 	public Bonus(int t) {
 		type = t;

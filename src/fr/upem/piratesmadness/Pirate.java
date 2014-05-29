@@ -1,12 +1,17 @@
 package fr.upem.piratesmadness;
 
+import java.io.ByteArrayOutputStream;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.Log;
+import android.graphics.Bitmap.CompressFormat;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Pirate {
+public class Pirate implements Parcelable{
 	Point coordinate;
 	int life;
 	String name;
@@ -19,8 +24,10 @@ public class Pirate {
 	final Rect padBuffer;
 	Rect origin;
 	int currently;
-	Activity ga;
+	int mode;
 	int id;
+	int width;
+	int height;
 	//need this variable volatile ?
 	volatile int twiceJump;
 	volatile boolean twiceSpeedAcceleration;
@@ -28,10 +35,10 @@ public class Pirate {
 
 	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face, int mode) {
 		this.id = id;
-		int width = activity.getIntent().getExtras().getInt("width");
-		int height = activity.getIntent().getExtras().getInt("height");
+		width = activity.getIntent().getExtras().getInt("width");
+		height = activity.getIntent().getExtras().getInt("height");
 		this.texture = face;
-		this.ga = activity;
+		this.mode = activity.getIntent().getExtras().getInt("mode");
 		coordinate = initialCoordinate;
 		if(mode==1){
 			if(id==1){
@@ -47,8 +54,6 @@ public class Pirate {
 		speedAcceleration=1;
 		noGravity=true;
 		name=activity.getIntent().getExtras().getString("player"+id);
-		Log.d("PiratesMadness","name1 : "+activity.getIntent().getExtras().getString("player1"));
-		Log.d("PiratesMadness","name2 : "+activity.getIntent().getExtras().getString("player2"));	
 		currently=-1;
 		//At the beginning you can't
 		twiceJump=10;
@@ -70,7 +75,7 @@ public class Pirate {
 	}
 
 	public Rect getPiratePadBuffer(){
-		switch(ga.getIntent().getExtras().getInt("mode")){
+		switch(mode){
 		case 1 : break;
 		default : 
 			this.padBuffer.left=coordinate.x-50;
@@ -95,6 +100,67 @@ public class Pirate {
 		return "Pirate (id:"+id+") "+name+"; coordinate(x,y) : ("+coordinate.x+","+coordinate.y+"); texture (height & width) : "+texture.getHeight()+";"+texture.getWidth()+"; gravity : "+noGravity+"; gravity sens : "+gravity+"; direction : "+direction+ "speed : "+speed+"; speedAcceleration : "+speedAcceleration+"; padBuffer : "+padBuffer.flattenToString();
 	}
 
+	
+	public Pirate(Parcel in){
+		name=in.readString();
+		int[] idata = new int[9];
+		in.readIntArray(idata);
+		this.id = idata[0];
+		int width = idata[1];
+		int height = idata[2];
+		this.mode = idata[3];
+		coordinate = new Point(idata[4], idata[5]);
+		if(mode==1){
+			this.padBuffer = new Rect(0, 0, (width/2), height);
+		}else{
+			this.padBuffer = new Rect((width/2), 0, width, height);
+		}
+		life = idata[6];
+		currently=idata[7];
+		twiceJump=idata[8];
+		float[] fdata = new float[2];
+		in.readFloatArray(fdata);
+		speed=fdata[0];
+		speedAcceleration=fdata[1];
+		boolean[] bdata = new boolean[2];
+		in.readBooleanArray(bdata);
+		noGravity=bdata[0];
+		twiceSpeedAcceleration=bdata[1];
+		byte[] array = in.createByteArray();
+		this.texture = BitmapFactory.decodeByteArray(array, 0, array.length);
+	}
+	
+    public static final Parcelable.Creator<Pirate> CREATOR = new Parcelable.Creator<Pirate>() {
+        public Pirate createFromParcel(Parcel in) {
+            return new Pirate(in); 
+        }
+
+        public Pirate[] newArray(int size) {
+            return new Pirate[size];
+        }
+    };
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(name);
+		dest.writeIntArray(new int[]{
+				id, width, height, mode, coordinate.x, coordinate.y, life, currently, twiceJump 
+		});
+		dest.writeFloatArray(new float[]{
+				speed, speedAcceleration
+		});
+		dest.writeBooleanArray(new boolean[]{
+				noGravity, twiceSpeedAcceleration
+		});
+		ByteArrayOutputStream blob = new ByteArrayOutputStream();
+		texture.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, blob);
+		dest.writeByteArray(blob.toByteArray());
+	}
+	
 	//	public static ArrayList<Pirate> createPirates(ArrayList<Point> arrayPoints, MainActivity activity, float width, float height) {
 	//		ArrayList<Pirate> arrayPirates = new ArrayList<Pirate>();
 	//		Bundle extras = activity.getIntent().getExtras();

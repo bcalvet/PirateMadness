@@ -13,7 +13,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 
@@ -51,8 +50,8 @@ public class FragmentSettings extends Fragment {
 		map.setBackgroundColor(getResources().getColor(R.color.grey));
 		map.addView(getPreconfiguredMapImageView(R.drawable.map1, params, 1));
 		map.addView(getPreconfiguredMapImageView(R.drawable.map3, params, 3));
-		RadioButton rb = (RadioButton) view.findViewById(R.id.easy_mode);
-		rb.setOnClickListener(new OnClickListener() {
+		RadioButton re = (RadioButton) view.findViewById(R.id.easy_mode);
+		re.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getActivity().getIntent().putExtra("mode", 1);
@@ -61,8 +60,7 @@ public class FragmentSettings extends Fragment {
 
 		Bundle extras = getActivity().getIntent().getExtras();
 
-		rb = (RadioButton) view.findViewById(R.id.hard_mode);
-		RadioButton re = (RadioButton) view.findViewById(R.id.easy_mode);
+		RadioButton rb = (RadioButton) view.findViewById(R.id.hard_mode);
 		if(extras!=null && extras.getInt("mode")==1){
 			re.setChecked(true);
 			rb.setChecked(false);
@@ -116,7 +114,6 @@ public class FragmentSettings extends Fragment {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
 				MainActivity activity = ((MainActivity)getActivity());
 				try{
 					if(!isChecked && activity.media!=null){
@@ -127,7 +124,6 @@ public class FragmentSettings extends Fragment {
 						}
 					}
 				}catch(IllegalStateException ise){
-					//TODO NOTHING : BUG WITH isPlaying
 				}
 			}
 		});
@@ -218,7 +214,6 @@ public class FragmentSettings extends Fragment {
 	}
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 		getActivity().getIntent().putExtras(saveParam(getActivity().getIntent().getExtras(), getView()));
 	}

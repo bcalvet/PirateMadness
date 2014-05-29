@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.Log;
-import android.widget.Toast;
 
 public class ImpactController {
 
@@ -51,13 +50,13 @@ public class ImpactController {
 			switch(b.type){
 			case 0:
 				p.life++;
-				p.ga.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						Toast.makeText(p.ga, "Pirate "+p.name+" win a life", Toast.LENGTH_SHORT).show();
-					}
-				});
+//				p.ga.runOnUiThread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						Toast.makeText(p.ga, "Pirate "+p.name+" win a life", Toast.LENGTH_SHORT).show();
+//					}
+//				});
 				break;
 			case 1:
 				p.direction = p.direction.oppositeDirection();
@@ -250,23 +249,23 @@ public class ImpactController {
 		if(Rect.intersects(p1.getPirateBuffer(), p2.getPirateBuffer())){
 			if(p1.speed+Math.abs(p1.speedAcceleration)>p2.speed+Math.abs(p2.speedAcceleration)){
 				p2.life--;
-				p2.ga.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						Toast.makeText(p1.ga, "Pirate "+p2.name+" loose a life", Toast.LENGTH_SHORT).show();
-					}
-				});
+//				p2.ga.runOnUiThread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						Toast.makeText(p1.ga, "Pirate "+p2.name+" loose a life", Toast.LENGTH_SHORT).show();
+//					}
+//				});
 			}
 			if(p1.speed+Math.abs(p1.speedAcceleration)<p2.speed+Math.abs(p2.speedAcceleration)){
 				p1.life--;
-				p1.ga.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						Toast.makeText(p1.ga, "Pirate "+p1.name+" loose a life", Toast.LENGTH_SHORT).show();
-					}
-				});
+//				p1.ga.runOnUiThread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						Toast.makeText(p1.ga, "Pirate "+p1.name+" loose a life", Toast.LENGTH_SHORT).show();
+//					}
+//				});
 			}
 
 			bounce(p1);
