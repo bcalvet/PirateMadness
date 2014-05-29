@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,32 +58,82 @@ public class FragmentSettings extends Fragment {
 				getActivity().getIntent().putExtra("mode", 1);
 			}
 		});
+
+		Bundle extras = getActivity().getIntent().getExtras();
+
 		rb = (RadioButton) view.findViewById(R.id.hard_mode);
+		RadioButton re = (RadioButton) view.findViewById(R.id.easy_mode);
+		if(extras!=null && extras.getInt("mode")==1){
+			re.setChecked(true);
+			rb.setChecked(false);
+		}else{
+			if(extras!=null && extras.getInt("mode")==2){
+				re.setChecked(false);
+				rb.setChecked(true);
+			}
+		}
+
 		rb.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getActivity().getIntent().putExtra("mode", 2);
 			}
 		});
-		EditText et = (EditText)view.findViewById(R.id.name_player1);
+		final EditText et = (EditText)view.findViewById(R.id.name_player1);
+		if(extras!=null && extras.getString("player1")!=null){
+			et.setText(extras.getString("player1"));
+		}
 		et.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus)
-					getActivity().getIntent().putExtra("player" + 1, 1);
+					getActivity().getIntent().putExtra("player"+1, et.getText().toString());
 			}
 		});
-		et = (EditText)view.findViewById(R.id.name_player2);
-		et.setOnFocusChangeListener(new OnFocusChangeListener() {
+		final EditText  et2 = (EditText)view.findViewById(R.id.name_player2);
+		if(extras!=null && extras.getString("player2")!=null){
+			et2.setText(extras.getString("player2"));
+		}
+		et2.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus)
-					getActivity().getIntent().putExtra("player" + 2, 2);
+					getActivity().getIntent().putExtra("player"+2, et2.getText().toString());
+			}
+		});
+		RadioButton onSound = (RadioButton) view.findViewById(R.id.button_sound_on);
+		RadioButton offSound = (RadioButton) view.findViewById(R.id.button_sound_off);
+		if(extras!=null && extras.getBoolean("sound")){
+			onSound.setChecked(true);
+			offSound.setChecked(false);
+		}else{
+			if(extras!=null){
+				onSound.setChecked(false);
+				offSound.setChecked(true);
+			}
+		}
+		onSound.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				MainActivity activity = ((MainActivity)getActivity());
+				try{
+					if(!isChecked && activity.media!=null){
+						activity.media.pause();
+					}else{
+						if(activity.media!=null && !activity.media.isPlaying()){
+							activity.media.start();
+						}
+					}
+				}catch(IllegalStateException ise){
+					//TODO NOTHING : BUG WITH isPlaying
+				}
 			}
 		});
 		return view;
 	}
-	
+
 	private ImageView getPreconfiguredMapImageView(final int drawableId,
 			LayoutParams params, final int mapId) {
 		ImageView iv = new ImageView(getActivity());
@@ -97,7 +149,7 @@ public class FragmentSettings extends Fragment {
 		iv.setImageResource(drawableId);
 		return iv;
 	}
-	
+
 	private ImageView getPreconfiguredImageView(final int drawableId,
 			LayoutParams params, final int playerId) {
 		ImageView iv = new ImageView(getActivity());
@@ -133,7 +185,7 @@ public class FragmentSettings extends Fragment {
 		}
 		Log.d("PiratesMadness - SettingsActivity", "text player1 vaut : "
 				+ text);
-		data.putString("namePlayer1", text);
+		data.putString("player1", text);
 
 		EditText edit2 = (EditText) v.findViewById(R.id.name_player2);
 		String text2 = edit2.getText().toString();
@@ -141,20 +193,18 @@ public class FragmentSettings extends Fragment {
 		if (text2.length() == 0) {
 			text2 = new String("Player2");
 		}
+		data.putString("player2", text2);
 		Log.d("PiratesMadness - SettingsActivity", "text player2 vaut : "
 				+ text2);
-		data.putString("namePlayer2", text2);
 
 		RadioButton modeEasy = (RadioButton) v.findViewById(R.id.easy_mode);
-		String textMode = null;
-		if (modeEasy.isChecked()) {
-			textMode = "easy";
-		} else {
-			textMode = "hard";
+		int mode = 1;
+		if (!modeEasy.isChecked()) {
+			mode = 2;
 		}
 		Log.d("PiratesMadness", "mode : "
 				+ ((modeEasy.isChecked() == true) ? "easy" : "hard"));
-		data.putString("mode", textMode);
+		data.putInt("mode", mode);
 
 		RadioButton soundOn = (RadioButton) v
 				.findViewById(R.id.button_sound_on);
@@ -165,5 +215,11 @@ public class FragmentSettings extends Fragment {
 		Log.d("PiratesMadness", "sound : " + sound);
 		data.putBoolean("sound", sound);
 		return data;
+	}
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		getActivity().getIntent().putExtras(saveParam(getActivity().getIntent().getExtras(), getView()));
 	}
 }

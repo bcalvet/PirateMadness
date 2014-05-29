@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 
 public class Pirate {
 	Point coordinate;
@@ -25,23 +26,29 @@ public class Pirate {
 	volatile boolean twiceSpeedAcceleration;
 
 
-	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face, int number) {
+	public Pirate(Point initialCoordinate, Activity activity, int id, Bitmap face, int mode) {
 		this.id = id;
 		int width = activity.getIntent().getExtras().getInt("width");
 		int height = activity.getIntent().getExtras().getInt("height");
 		this.texture = face;
 		this.ga = activity;
 		coordinate = initialCoordinate;
-		if(number==1){
-			this.padBuffer = new Rect(0, 0, (width/2), height);
+		if(mode==1){
+			if(id==1){
+				this.padBuffer = new Rect(0, 0, (width/2), height);
+			}else{
+				this.padBuffer = new Rect((width/2), 0, width, height);
+			}
 		}else{
-			this.padBuffer = new Rect((width/2), 0, width, height);
+			padBuffer = new Rect(coordinate.x+50, coordinate.y-50, coordinate.x-50, coordinate.y+50);
 		}
 		life = 3;
 		speed=3;
 		speedAcceleration=1;
 		noGravity=true;
 		name=activity.getIntent().getExtras().getString("player"+id);
+		Log.d("PiratesMadness","name1 : "+activity.getIntent().getExtras().getString("player1"));
+		Log.d("PiratesMadness","name2 : "+activity.getIntent().getExtras().getString("player2"));	
 		currently=-1;
 		//At the beginning you can't
 		twiceJump=10;
@@ -64,9 +71,14 @@ public class Pirate {
 
 	public Rect getPiratePadBuffer(){
 		switch(ga.getIntent().getExtras().getInt("mode")){
-		case 1 : return this.padBuffer;
-		default : return new Rect(coordinate.x+50, coordinate.y-50, coordinate.x-50, coordinate.y+50);
+		case 1 : break;
+		default : 
+			this.padBuffer.left=coordinate.x-50;
+			this.padBuffer.top=coordinate.y-50;
+			this.padBuffer.right=coordinate.x+50;
+			this.padBuffer.bottom = coordinate.y+50;
 		}
+		return this.padBuffer;
 	}
 
 	public Rect getPirateBuffer() {
@@ -80,7 +92,7 @@ public class Pirate {
 
 	@Override
 	public String toString() {
-		return "Pirate "+name+"; coordinate(x,y) : ("+coordinate.x+","+coordinate.y+"); texture (height & width) : "+texture.getHeight()+";"+texture.getWidth()+"; gravity : "+noGravity+"; gravity sens : "+gravity+"; direction : "+direction+ "speed : "+speed+"; speedAcceleration : "+speedAcceleration+"; padBuffer : "+padBuffer.flattenToString();
+		return "Pirate (id:"+id+") "+name+"; coordinate(x,y) : ("+coordinate.x+","+coordinate.y+"); texture (height & width) : "+texture.getHeight()+";"+texture.getWidth()+"; gravity : "+noGravity+"; gravity sens : "+gravity+"; direction : "+direction+ "speed : "+speed+"; speedAcceleration : "+speedAcceleration+"; padBuffer : "+padBuffer.flattenToString();
 	}
 
 	//	public static ArrayList<Pirate> createPirates(ArrayList<Point> arrayPoints, MainActivity activity, float width, float height) {

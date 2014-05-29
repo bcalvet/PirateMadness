@@ -3,20 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:background="@drawable/drapeau_pirate">
-    
-    <ImageButton 
-        android:id="@+id/main_menu_sound"
-	    android:layout_alignParentTop="true"
-	    android:layout_alignParentRight="true"
-	    android:layout_width="45dp"
-	    android:layout_height="45dp"
-	    android:src="@drawable/sound_on"
-	    android:clickable="true"
-	    android:layout_margin="10dp"
-	    android:contentDescription="@string/sound"
-	    android:background="@color/white"
-	    />
-	
+    	
 	<Button 
 	    android:id="@+id/main_menu_score_board"
 	    android:layout_width="180dp"

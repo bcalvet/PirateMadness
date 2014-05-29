@@ -40,14 +40,15 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					Log.d("PiratesMadness","évènement dans le onTouch");
 					int id = -1;
 					if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
-						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
+						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 							id = 0;
+						}
 					} else if(bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
-						if(!bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
+						if(!bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 							id = 1;
+						}
 					}
 					if(id!=-1){
 						//This condition avoids pirate to jump in fly
@@ -205,7 +206,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			}else{
 				p.setColor(getContext().getResources().getColor(R.color.blue));
 			}
-//			canvas.drawRect(pirate.getPiratePadBuffer(), p);
+			canvas.drawRect(pirate.getPiratePadBuffer(), p);
 		}
 	}
 	private void drawBonus(Canvas canvas){

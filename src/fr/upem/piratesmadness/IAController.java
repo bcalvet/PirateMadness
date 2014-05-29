@@ -59,7 +59,7 @@ public class IAController {
 	}
 
 	public void startingToJump(Pirate p){
-		//		Log.d("PiratesMadness", p.name+" starting to jump");
+		Log.d("PiratesMadness", p.name+" starting to jump");
 		p.speedAcceleration=(float) -1.6;
 		p.twiceJump=0;
 		if(p.twiceSpeedAcceleration){

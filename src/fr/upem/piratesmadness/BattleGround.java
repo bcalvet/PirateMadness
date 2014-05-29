@@ -88,7 +88,7 @@ public class BattleGround {
 											new_height,
 											extras.getInt("pirate1_drawable")
 											),
-											1
+											extras.getInt("mode")
 							)
 					);
 			pirates.add(
@@ -102,7 +102,7 @@ public class BattleGround {
 											new_height,
 											extras.getInt("pirate2_drawable")
 											),
-											2
+											extras.getInt("mode")
 							)
 					);
 			bg.arrayPirates = pirates;

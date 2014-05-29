@@ -1,10 +1,12 @@
 package fr.upem.piratesmadness;
 
+import android.R.attr;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class FragmentMain extends Fragment{
-	private boolean sound=true;
+	//	private boolean sound=true;
 
 	public FragmentMain() {
 	}
@@ -26,17 +28,6 @@ public class FragmentMain extends Fragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		Bundle extras = this.getActivity().getIntent().getExtras();
 		if(extras==null) extras = new Bundle();
-//			ImageButton bSound = (ImageButton) this.getActivity().findViewById(R.id.main_menu_sound);
-//			Log.d("PiratesMadness", "button bSound : "+bSound.getId());
-//			if(savedInstanceState!=null && savedInstanceState.getBowolean("sound"))bSound.setImageResource(R.drawable.sound_on);
-//			else bSound.setImageResource(R.drawable.sound_off);
-//			media = MediaPlayer.create(this, R.raw.neantitude_robin);
-//			media.start();
-//			media.setLooping(true);
-//			Log.d("PiratesMadness", "vue main");
-//			for(String k : extras.keySet()){
-//				System.out.println("Key : "+k+"; value : "+extras.getString(k));
-//			}
 		View view = inflater.inflate(R.layout.fragment_main, null);
 		setButtonOnListener(extras, view);
 		return view;
@@ -63,6 +54,12 @@ public class FragmentMain extends Fragment{
 				final Intent b = getActivity().getIntent();
 				b.putExtra("width", main_view.getWidth());
 				b.putExtra("height", main_view.getHeight());
+				MainActivity activity = (MainActivity)getActivity();
+				if(activity.media!=null && activity.media.isPlaying()){
+					activity.media.pause();
+					activity.media.stop();
+					activity.media.release();
+				}
 				ft.replace(android.R.id.content, new FragmentGame());
 				ft.addToBackStack(null);
 				ft.commit();
@@ -90,28 +87,43 @@ public class FragmentMain extends Fragment{
 				ft.commit();  
 			}
 		});
-		final ImageButton bSound = (ImageButton) v.findViewById(R.id.main_menu_sound);
-		bSound.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "button sound", Toast.LENGTH_SHORT).show();
-				sound = !sound;
-				if(sound)bSound.setImageResource(R.drawable.sound_on);
-				else bSound.setImageResource(R.drawable.sound_off);
-			}
-		});
+		//		final ImageButton bSound = (ImageButton) v.findViewById(R.id.main_menu_sound);
+		//		bSound.setOnClickListener(new OnClickListener() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				Toast.makeText(getActivity(), "button sound", Toast.LENGTH_SHORT).show();
+		//				sound = !sound;
+		//				if(sound)bSound.setImageResource(R.drawable.sound_on);
+		//				else bSound.setImageResource(R.drawable.sound_off);
+		//			}
+		//		});
 	}
 
-//	@Override
-//	public void onResume() {
-//		super.onResume();
-//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
-//	}
+	//	@Override
+	//	public void onResume() {
+	//		super.onResume();
+	//		setButtonOnListener(getActivity().getIntent().getExtras(), this.getView());
+	//	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putBoolean("sound", sound);
+		//		outState.putBoolean("sound", sound);
 	}
 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MainActivity activity = ((MainActivity)getActivity());
+		try{
+			if(getActivity().getIntent().getExtras()!=null && getActivity().getIntent().getExtras().getBoolean("sound") && activity.media!=null){
+				activity.media = MediaPlayer.create(getActivity(), R.raw.the_medallion_calls);
+				activity.media.start();
+				activity.media.setLooping(true);
+			}
+		}catch(IllegalStateException ise){
+			//TODO Nothing : bug with isPlaying()
+		}
+	}
 }
