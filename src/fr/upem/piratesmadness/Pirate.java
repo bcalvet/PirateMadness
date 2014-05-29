@@ -18,7 +18,7 @@ public class Pirate {
 	final Rect padBuffer;
 	Rect pirateBuffer = new Rect(0,0,0,0);
 	Rect origin;
-	int actualy;
+	int currently;
 	Activity ga;
 	//need this variable volatile ?
 	volatile int twiceJump;
@@ -41,13 +41,13 @@ public class Pirate {
 		speedAcceleration=1;
 		noGravity=true;
 		name=String.valueOf(number);
-		actualy=-1;
+		currently=-1;
 		//At the beginning you can't
 		twiceJump=10;
 		twiceSpeedAcceleration=false;
 	}
 
-	public boolean isActually(Rect rec){
+	public boolean isCurrently(Rect rec){
 //		int plop = -1;
 //		boolean result=false;
 //		float val = Math.abs(speedAcceleration);
@@ -56,22 +56,22 @@ public class Pirate {
 //			plop = rec.bottom;
 //			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.bottom, actualy+(speed+val));
 //			break;
-			return rec.bottom==actualy;
+			return rec.bottom==currently;
 		case SOUTH:
 //			plop = rec.top;
 //			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.top, actualy+(speed+val));
 //			break;
-			return rec.top == actualy;
+			return rec.top == currently;
 		case EAST:
 //			plop = rec.left;
 //			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.left, actualy+(speed+val));
 //			break;
-			return rec.left==actualy;
+			return rec.left==currently;
 		case WEST:
 //			plop = rec.right;
 //			result= ImpactController.isInThisInterval(actualy-(speed+val), rec.right, actualy+(speed+val));
 //			break;
-			return  rec.right==actualy;
+			return  rec.right==currently;
 		}
 //		Log.d("Pirate", "gravity : " + gravity + " actually " +actualy + " compared to " + plop+"; result : "+result);
 //		return result;
@@ -79,20 +79,20 @@ public class Pirate {
 		return false;
 	}
 	
-	public void setActually(Rect rec){
+	public void setCurrently(Rect rec){
 //		Log.d("PiratesMadness","old actualy : "+actualy+"; gravity : "+gravity);
 		switch (gravity) {
 		case NORTH:
-			actualy = rec.bottom;
+			currently = rec.bottom;
 			break;
 		case SOUTH:
-			actualy = rec.top;
+			currently = rec.top;
 			break;
 		case EAST:
-			actualy = rec.left;
+			currently = rec.left;
 			break;
 		case WEST:
-			actualy = rec.right;
+			currently = rec.right;
 			break;
 		}
 //		Log.d("PiratesMadness","rect : "+rec.flattenToString()+"; new actually : "+actualy);

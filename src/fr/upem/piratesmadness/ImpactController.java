@@ -39,7 +39,7 @@ public class ImpactController {
 	}
 
 	private void bounce(Pirate p1){
-		Log.d("PiratesMadness","bounce");
+		Log.d("PiratesMadness",p1.name+" bounce");
 		switch(p1.direction){
 		case NORTH : p1.direction = Direction.SOUTH; break;
 		case SOUTH : p1.direction = Direction.NORTH; break;
@@ -47,26 +47,85 @@ public class ImpactController {
 		case WEST : p1.direction = Direction.EAST; break;
 		}
 		//Security : check if the pirate bug - postTraitement
-		if(p1.direction.isOpposite(p1.gravity)){
-			p1.direction.randomDirection(p1);
-		}
+//		if(p1.direction.isOpposite(p1.gravity)){
+//			p1.direction.randomDirection(p1);
+//		}
 	}
 
 	private boolean changeGravity(Pirate p1, Rect rec){
+		Log.d("PiratesMadness", "changeGravity old "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
 		Direction tmp = checkGravity(p1, rec);
 		boolean result = changeDirection(p1, tmp);
+		Log.d("PiratesMadness", "changeGravity new "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
 		return result;
 	}
 
-	private Direction checkGravity(Pirate p, Rect r){
-		Rect r2 = p.getPirateBuffer();
-		if(r2.bottom>r.top && r2.right>=r.left && r2.top<r.bottom && r2.left<r.left)
-			return Direction.EAST;
-		if(r2.bottom>=r.top && r2.right>r.left && r2.left<r.right && r2.top<r.top)
-			return Direction.SOUTH;
-		if(r2.top<=r.bottom && r2.left<r.right && r2.right>r.left && r2.bottom>r.bottom)
-			return Direction.NORTH;
-		return Direction.WEST;
+	private Direction checkGravity(Pirate p, Rect obstacle){
+		Rect pirateBuffer = p.getPirateBuffer();
+
+		//We compare if the pirate is inside the wall with a possible value max set p.speed
+		int value = Math.round(p.speed);
+//		Log.d("PiratesMadness", "changeGravity value : "+value);
+		
+		boolean directionOk=false;
+		//Create a new Rect (intersection) with coordinates of the intersection.
+		Rect intersection = new Rect(pirateBuffer);
+//		Log.d("PiratesMadness", "changeGravity before- rect pirate : "+intersection.flattenToString()+", obstacle : "+obstacle.flattenToString());
+		intersection.intersect(obstacle);
+//		Log.d("PiratesMadness", "changeGravity after- rect pirate : "+intersection.flattenToString()+", obstacle : "+obstacle.flattenToString());
+		//To know if we intersect in the direction we compare width and height of the new Rect (intersection)
+		
+//		Log.d("PiratesMadness","height and width : "+intersection.height()+" ? "+intersection.width());
+		
+		switch (p.direction) {
+		case NORTH:
+			//Don't forgive to inverse values due to the order (min, val, max)
+			if(isInThisInterval(obstacle.bottom-value, pirateBuffer.top, obstacle.bottom)
+					&& intersection.height()<=intersection.width()){
+//				Log.d("PiratesMadness", "direction NORTH ok");
+				directionOk=true;
+			}
+			break;
+		case SOUTH:
+			if(isInThisInterval(obstacle.top, pirateBuffer.bottom, obstacle.top+value)
+					&& intersection.height()<intersection.width()){
+//				Log.d("PiratesMadness", "direction SOUTH ok");
+				directionOk=true;
+			}
+			break;
+		case EAST:			
+			if(isInThisInterval(obstacle.left, pirateBuffer.right, obstacle.left+value) 
+					&& intersection.width()<intersection.height()){
+//				Log.d("PiratesMadness", "direction EAST ok");
+				directionOk=true;
+			}
+			break;
+		case WEST:			
+			if(isInThisInterval(obstacle.right-value, pirateBuffer.left, obstacle.right)
+					&& intersection.width()<intersection.height()){
+//				Log.d("PiratesMadness", "direction WEST ok");
+				directionOk=true;
+			}
+			break;
+		}
+		
+		//If it's the direction
+		if(directionOk){
+//			Log.d("PiratesMadness", "Return direction");
+			return p.direction;
+		}
+		//Else if (jump) : it's not the direction and he is in ascending state, so it must be the opposite of its gravity
+		else{
+			if(p.speedAcceleration<0){
+//				Log.d("PiratesMadness", "Return opposite to gravity");
+				return p.gravity.oppositeDirection();
+			}
+		//Else : he is falling, so it's the currently gravity
+			else{
+//				Log.d("PiratesMadness", "Return gravity");
+				return p.gravity;
+			}
+		}
 	}
 
 	private boolean hitWall(Rect obstacle, Pirate p1){
@@ -74,11 +133,11 @@ public class ImpactController {
 		if(Rect.intersects(obstacle, bufferOfPirate)){
 			//When intersects first time after jump set twiceJump true, because the player can rejump. But he as only one chance
 			p1.twiceJump++;
-			if(!p1.isActually(obstacle)){
+			if(!p1.isCurrently(obstacle)){
 				//hit a wall when jumping
 				if(p1.noGravity && changeGravity(p1,obstacle)){
 					p1.noGravity = false;
-					p1.setActually(obstacle);
+					p1.setCurrently(obstacle);
 					//Correction of the pirateBuffer position.
 					Log.d("PiratesMadness","pirate corrections - g : "+p1.gravity+", d : "+p1.direction);
 					switch (p1.gravity) {
@@ -118,6 +177,7 @@ public class ImpactController {
 	}
 
 	private boolean isPerpendicular(Rect obstacle, Pirate p1) {
+		Log.d("PiratesMadness",p1.name+" isPerpendicular");
 		switch (p1.direction) {
 		case NORTH:
 			return isInThisInterval(obstacle.left, p1.getPirateBuffer().centerX(), obstacle.right);
@@ -152,9 +212,10 @@ public class ImpactController {
 	}
 
 	public boolean changeDirection(Pirate p, Direction newGravity){
+		Log.d("PiratesMadness",p.name+" changeDirection");
 		if(newGravity!=p.gravity && !p.gravity.isOpposite(newGravity)){
 			if(p.speedAcceleration<0){
-				p.direction = p.gravity.oppositeDirection(p);
+				p.direction = p.gravity.oppositeDirection();
 			}else{
 				p.direction = p.gravity;
 			}

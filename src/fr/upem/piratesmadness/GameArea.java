@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -38,7 +40,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					//					Log.d("PiratesMadness","évènement dans le onTouch");
+					Log.d("PiratesMadness","évènement dans le onTouch");
 					int id = -1;
 					if(bg.arrayPirates.get(0).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY())){
 						if(!bg.arrayPirates.get(1).getPiratePadBuffer().contains((int)event.getX(), (int)event.getY()))
@@ -150,7 +152,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			fos.close();
 		}catch(IOException e){}
 		main.runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				main.setContentView(ll);
@@ -158,7 +160,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 		});
 		workerThread.interrupt();
 	}
-	
+
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		workerThread.start();
@@ -181,7 +183,7 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			p.setColor(getContext().getResources().getColor(R.color.Black));
 			p.setStrokeWidth(2);
 			p.setStyle(Style.STROKE);
-//			canvas.drawRect(bg.obstacles.get(i), p);
+			//			canvas.drawRect(bg.obstacles.get(i), p);
 			canvas.drawBitmap(bg.texture, null, bg.obstacles.get(i), p);
 		}
 	}

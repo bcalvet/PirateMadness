@@ -8,9 +8,9 @@ public class IAController {
 
 
 	private void move(Pirate pirate){
+		Log.d("PiratesMadness",pirate.name+" move");
 		if(pirate.noGravity){
-			if(pirate.speed>=0)pirate.actualy=-1;
-				
+
 			//Jumping : sometimes or Falling : sometimes
 			switch (pirate.gravity) {
 			case NORTH:
@@ -26,13 +26,19 @@ public class IAController {
 				pirate.coordinate.y+=pirate.speed*pirate.speedAcceleration;
 				break;
 			}
-			//Hack : needed to use variable speedAcceleration with value set 1
-			if(pirate.speedAcceleration==1 && pirate.noGravity){
+//			//Hack : needed to use variable speedAcceleration with value set 1
+//			if(pirate.speedAcceleration==1){
+//				pirate.speedAcceleration+=0.1;
+//			}
+			//change speedAcceleration
+			if(pirate.speedAcceleration<1.6){
 				pirate.speedAcceleration+=0.1;
 			}
-			//change speedAcceleration
-			if(pirate.speedAcceleration!=1.6 && pirate.speedAcceleration!=1 && pirate.speedAcceleration!=-1.6){
-				pirate.speedAcceleration+=0.1;
+			//After pirate moves in the air, we stop the condition with currently
+			Log.d("PiratesMadness", "speedAcceleration : "+pirate.speedAcceleration+"; speed total : "+pirate.speed*pirate.speedAcceleration);
+			//Becarefull : float is not sure. You can't say : pirate.speedAcceleration==0.
+			if(pirate.speedAcceleration>0){
+				pirate.currently=-1;
 			}
 		}
 		switch (pirate.direction) {
@@ -51,8 +57,9 @@ public class IAController {
 			break;
 		}
 	}
-	
+
 	public void startingToJump(Pirate p){
+		Log.d("PiratesMadness", p.name+" starting to jump");
 		p.speedAcceleration=(float) -1.6;
 		p.twiceJump=0;
 		if(p.twiceSpeedAcceleration){
@@ -67,15 +74,15 @@ public class IAController {
 
 	public void update(BattleGround battleGround){
 		//DEBUG 
-//		showInformation(battleGround);
-		
+		//		showInformation(battleGround);
+
 		int numberOfPirates = battleGround.arrayPirates.size();
 		ArrayList<Pirate> arrayPirate = battleGround.arrayPirates;
-		
+
 		for(int i=0; i<numberOfPirates; i++){
 			//If there is a jump : check direction and gravity; due to two variables changed
 			move(arrayPirate.get(i));
 		}
 	}
-	
+
 }
