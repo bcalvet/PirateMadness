@@ -32,14 +32,14 @@ public class ImpactController {
 	}
 
 	private void fall(Pirate p1) {
-		Log.d("PiratesMadness","fall");
+//		Log.d("PiratesMadness","fall");
 		// With set speedAcceleration 1.1, speedAcceleration increase to 1.6 by step 0.1
 		p1.speedAcceleration=(float)1.1;
 		p1.noGravity=true;
 	}
 
 	private void bounce(Pirate p1){
-		Log.d("PiratesMadness",p1.name+" bounce");
+//		Log.d("PiratesMadness",p1.name+" bounce");
 		switch(p1.direction){
 		case NORTH : p1.direction = Direction.SOUTH; break;
 		case SOUTH : p1.direction = Direction.NORTH; break;
@@ -53,10 +53,10 @@ public class ImpactController {
 	}
 
 	private boolean changeGravity(Pirate p1, Rect rec){
-		Log.d("PiratesMadness", "changeGravity old "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
+//		Log.d("PiratesMadness", "changeGravity old "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
 		Direction tmp = checkGravity(p1, rec);
 		boolean result = changeDirection(p1, tmp);
-		Log.d("PiratesMadness", "changeGravity new "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
+//		Log.d("PiratesMadness", "changeGravity new "+p1.name+" - gravity : "+p1.gravity+"; direction : "+p1.direction);
 		return result;
 	}
 
@@ -139,7 +139,7 @@ public class ImpactController {
 					p1.noGravity = false;
 					p1.setCurrently(obstacle);
 					//Correction of the pirateBuffer position.
-					Log.d("PiratesMadness","pirate corrections - g : "+p1.gravity+", d : "+p1.direction);
+//					Log.d("PiratesMadness","pirate corrections - g : "+p1.gravity+", d : "+p1.direction);
 					switch (p1.gravity) {
 					case NORTH:
 						p1.coordinate.y=obstacle.bottom+(bufferOfPirate.height()/2)-1;
@@ -177,7 +177,7 @@ public class ImpactController {
 	}
 
 	private boolean isPerpendicular(Rect obstacle, Pirate p1) {
-		Log.d("PiratesMadness",p1.name+" isPerpendicular");
+//		Log.d("PiratesMadness",p1.name+" isPerpendicular");
 		switch (p1.direction) {
 		case NORTH:
 			return isInThisInterval(obstacle.left, p1.getPirateBuffer().centerX(), obstacle.right);
@@ -201,8 +201,15 @@ public class ImpactController {
 			if(p1.speed+Math.abs(p1.speedAcceleration)<p2.speed+Math.abs(p2.speedAcceleration)){
 				p1.life--;
 			}
+			
 			bounce(p1);
 			bounce(p2);
+			IAController ia = new IAController();
+			//Correction of pirates's positions - pirate who has lost a life moves back
+			while(Rect.intersects(p1.getPirateBuffer(), p2.getPirateBuffer())){
+				ia.move(p1);
+				ia.move(p2);
+			}
 			Log.d("PiratesMadness", "Life p1 : "+p1.life+"; life p2 : "+p2.life);
 		}
 	}
@@ -212,7 +219,7 @@ public class ImpactController {
 	}
 
 	public boolean changeDirection(Pirate p, Direction newGravity){
-		Log.d("PiratesMadness",p.name+" changeDirection");
+//		Log.d("PiratesMadness",p.name+" changeDirection");
 		if(newGravity!=p.gravity && !p.gravity.isOpposite(newGravity)){
 			if(p.speedAcceleration<0){
 				p.direction = p.gravity.oppositeDirection();

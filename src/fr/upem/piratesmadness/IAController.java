@@ -7,8 +7,8 @@ import android.util.Log;
 public class IAController {
 
 
-	private void move(Pirate pirate){
-		Log.d("PiratesMadness",pirate.name+" move");
+	void move(Pirate pirate){
+//		Log.d("PiratesMadness",pirate.name+" move");
 		if(pirate.noGravity){
 
 			//Jumping : sometimes or Falling : sometimes
@@ -35,7 +35,7 @@ public class IAController {
 				pirate.speedAcceleration+=0.1;
 			}
 			//After pirate moves in the air, we stop the condition with currently
-			Log.d("PiratesMadness", "speedAcceleration : "+pirate.speedAcceleration+"; speed total : "+pirate.speed*pirate.speedAcceleration);
+//			Log.d("PiratesMadness", "speedAcceleration : "+pirate.speedAcceleration+"; speed total : "+pirate.speed*pirate.speedAcceleration);
 			//Becarefull : float is not sure. You can't say : pirate.speedAcceleration==0.
 			if(pirate.speedAcceleration>0){
 				pirate.currently=-1;
@@ -59,7 +59,7 @@ public class IAController {
 	}
 
 	public void startingToJump(Pirate p){
-		Log.d("PiratesMadness", p.name+" starting to jump");
+//		Log.d("PiratesMadness", p.name+" starting to jump");
 		p.speedAcceleration=(float) -1.6;
 		p.twiceJump=0;
 		if(p.twiceSpeedAcceleration){
