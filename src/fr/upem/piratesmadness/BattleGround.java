@@ -24,10 +24,12 @@ public class BattleGround {
 	int height;
 	int difficulty;
 	ArrayList<Pirate> arrayPirates;
+	ArrayList<Bonus> arrayBonus;
 
 	static BattleGround initGame(MainActivity activity) {
 		try {			
 			BattleGround bg = new BattleGround();
+			bg.arrayBonus = new ArrayList<Bonus>();
 			bg.obstacles = new ArrayList<Rect>();
 			Bundle extras = activity.getIntent().getExtras();
 			bg.difficulty = extras.getInt("mode");

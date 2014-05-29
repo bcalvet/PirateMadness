@@ -87,12 +87,16 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 					SurfaceHolder holder = ga.getHolder();
 					impactController.update(bg);
 					ia.update(bg);
+					if(Bonus.generate()){
+						ga.bg.arrayBonus.add(Bonus.generator(ga));
+					}
 					long current_time = System.currentTimeMillis()-time;
 					try{
 						Canvas canvas = holder.lockCanvas();
 						canvas.drawRGB(255, 255, 255);
 						drawMap(canvas);
 						drawPirate(canvas);
+						drawBonus(canvas);
 						holder.unlockCanvasAndPost(canvas);
 					}catch(NullPointerException npe){
 						//Do Nothing
@@ -201,7 +205,20 @@ public class GameArea extends SurfaceView implements SurfaceHolder.Callback {
 			}else{
 				p.setColor(getContext().getResources().getColor(R.color.blue));
 			}
-			canvas.drawRect(pirate.getPiratePadBuffer(), p);
+//			canvas.drawRect(pirate.getPiratePadBuffer(), p);
+		}
+	}
+	private void drawBonus(Canvas canvas){
+		Paint p = new Paint();
+		p.setColor(getContext().getResources().getColor(R.color.grey));
+		for(int i=0; i<bg.arrayBonus.size();i++){
+			if(bg.arrayBonus.get(i).visibility){
+				canvas.drawBitmap(bg.arrayBonus.get(i).texture,
+				(float)bg.arrayBonus.get(i).coordinate.x-(bg.arrayBonus.get(i).texture.getWidth()/2),
+				(float)bg.arrayBonus.get(i).coordinate.y-(bg.arrayBonus.get(i).texture.getHeight()/2), null);
+				canvas.drawRect(bg.arrayBonus.get(i).getBuffer(), p);
+				
+			}
 		}
 	}
 }

@@ -114,4 +114,17 @@ public enum Direction {
 	abstract public boolean isOpposite(Direction d);
 	abstract public void randomDirection(Pirate p);
 	abstract public Direction oppositeDirection();
+	static Direction random(Random random){
+		int val = random.nextInt((int)System.currentTimeMillis())%4;
+		switch (val) {
+		case 0:
+			return Direction.NORTH;
+		case 1:
+			return Direction.EAST;
+		case 2:
+			return Direction.SOUTH;
+		default :
+			return Direction.WEST;
+		}
+	}
 }
